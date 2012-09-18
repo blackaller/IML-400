@@ -1,0 +1,48 @@
+<script>
+    var step = true;
+
+    function animate(div) {
+        if ( step ){
+            div.style.color="crimson";
+            div.style.background="gold";
+        }
+        else{
+            div.style.color="gold";
+            div.style.background="crimson";
+        }
+        
+        step = !step;
+        setTimeout(function () {
+            animate(div);
+        }, 500);
+    }
+
+    window.onload = function () {
+        var div = document.getElementById("hello");
+        animate(div);
+    }
+</script>
+
+<style>
+    body{
+        background: #222;
+    }
+    .hi{
+        width: 455px;
+        margin: 120px auto;
+        padding: 0 20px;
+        
+    }
+    #hello{
+        font-weight: bold;
+        font-size: 5em;
+        background: gold;
+        color: crimson;
+    }
+</style>
+
+<div class="hi" id="hello">
+    Hello World!
+</div>
+
+
