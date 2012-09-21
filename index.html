@@ -1,48 +1,79 @@
-<script>
-    var step = true;
+<head>
+	<title>IML 400 Fall 2012</title>
 
-    function animate(div) {
-        if ( step ){
-            div.style.color="crimson";
-            div.style.background="gold";
+    <script>
+        var step = true;
+
+        function animate(div) {
+            if ( step ){
+                div.style.color="crimson";
+                div.style.background="gold";
+            }
+            else{
+                div.style.color="gold";
+                div.style.background="crimson";
+            }
+
+            step = !step;
+            setTimeout(function () {
+                animate(div);
+            }, 500);
         }
-        else{
-            div.style.color="gold";
-            div.style.background="crimson";
-        }
-        
-        step = !step;
-        setTimeout(function () {
+
+        window.onload = function () {
+            var div = document.getElementById("hello");
             animate(div);
-        }, 500);
-    }
+        }
+    </script>
 
-    window.onload = function () {
-        var div = document.getElementById("hello");
-        animate(div);
-    }
-</script>
+	<style>
+		body{
+			color: #eee;
+			background: #222;
+		}
+		}
+		a{
+			font-weight:bold;
+			text-decoration:none;
+			color:crimson;
+		}
+		a:link, a:visited, a:active{
+		    font-weight:bold;
+			text-decoration:none;
+			color:crimson;
+		}
+		a:hover{
+			color:gold;
+		}
+		
+        .hi{
+            text-align:center;
 
-<style>
-    body{
-        background: #222;
-    }
-    .hi{
-        width: 455px;
-        margin: 120px auto;
-        padding: 0 20px;
-        
-    }
-    #hello{
-        font-weight: bold;
-        font-size: 5em;
-        background: gold;
-        color: crimson;
-    }
-</style>
+        }
+        #hello{
+            font-weight: bold;
+            font-size: 5em;
+            background: gold;
+            color: crimson;
+        }
 
-<div class="hi" id="hello">
-    Hello World!
-</div>
+		#wrapper{
+			width: 600px;
+			margin:40px auto;
+		}
+	</style>
+</head>
 
-
+<body>
+	<div id="wrapper">
+	    <div class="hi" id="hello">
+            Hello World!
+        </div>
+	    
+		<h1>Welcome to IML 400 Fall 2012</h1>
+		<p>
+			<a href="assignment-1.html">Assignment 1</a>
+			<img src="images/robot.png" />
+		</p>
+	</div>
+</body>
