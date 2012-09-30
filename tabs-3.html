@@ -7,70 +7,86 @@
     <title>tab navigation 3</title>
     <meta name="author" content="Luis Blackaller">
     <!-- Date: 2012-09-24 -->
-        <style>
+    <!-- this is how you link to an external CSS file: -->
+    <link href="tabs.css" rel="stylesheet" type="text/css">
+    <!-- this is how you add CSS using the <style> tab:
+    <style>
         body{
-            margin:0;
-            padding:0;
-            font-family:arial;
-            background:#eee;
-        }
+        margin:0;
+        padding:0;
+        font-family:arial;
+        background:#eee;
+    }
 
-        h1{
-            color:dodgerblue;
-        }
+    h1{
+        color:dodgerblue;
+    }
 
-        #content-wrapper{
-            width:640px;
-            margin: 80px auto;
+    #content-wrapper{
+        width:640px;
+        margin: 80px auto;
 
-        }
+    }
 
-        #nav-bar{
-            font-weight:bold;
-            position:fixed;
-            top:0;
-            background:#111;
-            color:#eee;
-            width:100%;
-            margin:0;
-            padding:0;
-        }
-        .nav ul{
-            list-style: none;
-            margin:0;
-            padding:0;
-        }
+    #nav-bar{
+        font-weight:bold;
+        position:fixed;
+        top:0;
+        background:#111;
+        color:#eee;
+        width:100%;
+        margin:0;
+        padding:0;
+    }
+    .nav ul{
+        list-style: none;
+        margin:0;
+        padding:0;
+    }
 
-        .nav li{
-            list-style: none;
-            /*background:dodgerblue;*/
-            margin:0;
-            display:inline;
-            padding:10px 20px 10px 20px;
+    .nav li{
+        list-style: none;
+        /*background:dodgerblue;*/
+        margin:0;
+        display:inline;
+        padding:10px 20px 10px 20px;
 
-        }
-        /*
-        .nav li:hover{
-            background:red;
-        }
-        */
-        .nav a{
-            font-weight:bold;
-            color:dodgerblue;
-            text-decoration:none;
-        }
-        .nav a:hover{
-            color:#eee;
+    }
+    /*
+    .nav li:hover{
+        background:red;
+    }
+    */
+    .nav a{
+        font-weight:bold;
+        color:dodgerblue;
+        text-decoration:none;
+    }
+    .nav a:hover{
+        color:#eee;
 
-        }
+    }
 
-        #selected-tab{
-            border-bottom:solid 7px;
-        }
-        #selected-link{
-            color:gold;
-        }
-        </style>
+    #selected-tab{
+        border-bottom:solid 7px;
+    }
+    #selected-link{
+        color:gold;
+    }
+    </style>
+    -->
+    <!-- Let's add some general styling to the <a> tab: -->
+    <style>
+    a{
+        font-weight:bold;
+        color:crimson;
+        text-decoration:none;
+    }
+    a:hover{
+        color:dodgerblue;
+
+    }
+    </style>
     </head>
     <body>
         <div id="nav-bar">
@@ -91,6 +107,9 @@
 
             <h1>More content</h1>
 
+            <p>
+                This particular HTML file is making reference to an <a href="http://localhost/hello-world/tabs.css">external CSS file</a>.
+            </p>
             <p>
                 And he took a horse and went forward.  And he came to an open level
                 plain, and put spurs to his horse; and the more he urged his horse,

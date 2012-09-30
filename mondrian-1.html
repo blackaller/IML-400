@@ -10,14 +10,25 @@
 	
 	<style>
 	body{
+	    font-family:arial;
 	    margin:0;
 	    padding:0;
+	    background:#eee;
 	}
 	#wrapper{
 	    color:#eee;
+	    /* different options for positioning
 	    position:absolute;
+	    position:relative;
+	    position:fixed;
+	    */
+	    margin:80px auto;
+	    width:800px;
+	    height:800px;
+	    /* turn this on for automatic resizing
 	    width:100%;
 	    height:100%;
+	    */
 	    background:#111;
 	}
 	.one-third{
@@ -44,8 +55,8 @@
         <div class="one-third" style="background:gold;"> 
         </div>
 
-        <div class="one-third" style="background:#ddd; overflow:hidden; color:#111;">
-            <!--
+        <div class="one-third" style="z-index:1000; background:#ddd; overflow:auto; color:#111;">
+            
             And no later than the next day was Teirnyon equipped, and two other
             knights with him.  And the boy, as a fourth in their company, went
             with them upon the horse which Teirnyon had given him.  And they
@@ -81,13 +92,14 @@
             be."  "It were more proper," said Pwyll, "that the boy should take
             his name from the word his mother spoke when she received the joyful
             tidings of him."  And thus was it arranged.
-            -->
+            
         </div>
 
-        <div class="one-third" style="background:#ddd; /*background:#ddd url('images/robot.png'); background-size:100% 100%; background-repeat:no-repeat;*/">
+        <div class="one-third" style="background:#ddd; background:#ddd url('images/robot.png'); background-size:100% 100%; background-repeat:no-repeat; border-radius: 20px;">
         </div>
 
-        <div class="one-third" style="background:#ddd;">
+        <div class="one-third" style="background:#ddd; border-radius: 20px;">
+            <img src="images/robot.png" / style="width:100%; height:100%; ">
         </div>
 
         <div class="one-third" style="background:;">

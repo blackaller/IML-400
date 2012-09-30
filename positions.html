@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>css positions</title>
+	<meta name="author" content="Luis Blackaller">
+	<!-- Date: 2012-09-25 -->
+</head>
+    <style>
+    body{
+        margin:0;
+        padding:0;
+    }
+    #wrapper{
+        position:relative;
+        margin:40px auto;
+        width:800px;
+        border:black 1px solid;
+        overflow:auto;
+    }
+    .fixed{
+        position:fixed;
+        top:0;
+        left:0;
+        /*
+        width:100px;
+        height:100px;
+        */
+        border:black 1px solid;
+    }
+    .absolute{
+        position:fixed;
+        /*
+        width:100px;
+        height:100px;
+        */
+        border:black 1px solid;
+    }
+    .relative{
+        margin:10px;
+        width:50px;
+        height:50px;
+        border:black 1px solid;
+    }
+    .left{
+        float:left;
+    }
+    .right{
+        float:right;
+    }
+    </style>
+<body>
+    <div id="wrapper">
+        <div class="fixed">
+            <div class="relative"></div>
+            <div class="relative"></div>
+            <div class="relative"></div>
+        </div>
+        <div class="relative right"></div>
+        <div class="relative right"></div>
+        <div class="relative right"></div>
+        
+        <div class="absolute">
+            <div class="relative"></div>
+            <div class="relative"></div>
+            <div class="relative"></div>
+        </div>
+    </div>
+</body>
+</html>
