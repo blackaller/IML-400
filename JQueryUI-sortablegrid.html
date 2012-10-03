@@ -33,16 +33,24 @@
     	    padding: 0;
     	}
     	#sortable li {
-    	    margin: 2px;
-    	    padding: 2px;
+    	    /* UNCOMMENT THIS IF YOU WANT TO POPULATE THE GRID BY HAND
+    	    width:152px;
+    	    height:152px;
+    	    margin:2px;
+    	    padding:2px;
+    	    background:deeppink;
+    	    */
     	    float: left;
-    	    font-size: 2em;
+    	    font-size: 1em;
     	    text-align: left;
     	}
     	</style>
     	<script>
     	var gridSize=4;
     	var cellSize=140;
+    	var margin=2;
+    	var padding=2;
+    	var marginsPaddings=2*(margin+padding);
     	function fillTheGrid(id, size){
     	    var sizeSquared = size * size;    
     	    $("#wrapper").css("width", size * cellSize);
@@ -57,8 +65,10 @@
         	        $("#image-" + k).css("background", "#" + colorNum+colorNum+colorNum+colorNum+colorNum+colorNum+" url('images/ojo.JPG')");
         	        //$("#image-" + k).css("background", "url('images/robot.png')");
         	        $("#image-" + k).css("background-position", ((j-1)*(100/gridSize))+"%"+(i-1)*(100/gridSize)+"%");
-        	        $("#image-" + k).css("width", "" + cellSize-8);
-        	        $("#image-" + k).css("height", "" + cellSize-8);
+        	        $("#image-" + k).css("width", "" + cellSize-marginsPaddings);
+        	        $("#image-" + k).css("height", "" + cellSize-marginsPaddings);
+        	        $("#image-" + k).css("margin", + margin+"px");
+        	        $("#image-" + k).css("padding", + padding+"px");
 	            }
     	    }
     	    return;
@@ -67,7 +77,9 @@
     	
     	
     	$(function() {
+    	    //YOU CAN DEACTIVATE THE NEXT LINE OF CODE TO FILL TTHE GRID IN BY HAND. JUST COMMENT IT LIKE THIS: //fillTheGrid("#sortable", gridSize);
     	    fillTheGrid("#sortable", gridSize);
+    	    
     		$( "#sortable" ).sortable();
     		$( "#sortable" ).disableSelection();
     	});
@@ -79,7 +91,8 @@
     <div id="grid">
 
     <ul id="sortable">
-        <!--
+        
+        <!-- UNCOMMENT THESE LINES TO FILL THINGS IN BY HAND (WITH IMAGES OR WHATEVER) 
     	<li class="ui-state-default">1</li>
     	<li class="ui-state-default">2</li>
     	<li class="ui-state-default">3</li>
@@ -97,9 +110,10 @@
     	<li class="ui-state-default">15</li>
     	<li class="ui-state-default">16</li>
     	-->
+    	
     </ul>
 
-    </div><!-- End demo -->
+    </div><!-- End grid -->
 
 
 
@@ -108,7 +122,7 @@
     	To arrange sortable items as a grid, give them identical dimensions and
     	float them using CSS.
     </p>
-    </div><!-- End demo-description -->
+    </div><!-- End footnote -->
     
     <div/>
     
