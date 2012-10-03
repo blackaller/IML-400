@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>JQuery intro</title>
+	<meta name="author" content="Luis Blackaller">
+	
+	<!-- this pulls jQuery from the cloud
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
+    -->
+	<!-- this pulls jQuery from my server -->
+	<script src="js/jquery-1.8.2.js" type="text/javascript"></script>
+	<script src="js/jquery-ui-1.8.24.custom.min.js" type="text/javascript"></script>
+	<!-- Date: 2012-10-02 -->
+    	<style>
+    	body{
+    	    background:#222;
+    	    color:#eee;
+    	}
+    	#wrapper{
+    	    width:640px;
+    	    margin:60px auto;
+    	}
+    	#grid{
+    	    overflow:auto;
+    	}
+    	#sortable {
+    	    list-style-type: none;
+    	    margin: 0;
+    	    padding: 0;
+    	}
+    	#sortable li {
+    	    margin: 2px;
+    	    padding: 2px;
+    	    float: left;
+    	    font-size: 2em;
+    	    text-align: left;
+    	}
+    	</style>
+    	<script>
+    	var gridSize=4;
+    	var cellSize=140;
+    	function fillTheGrid(id, size){
+    	    var sizeSquared = size * size;    
+    	    $("#wrapper").css("width", size * cellSize);
+    	    $(id).html("");
+    	    for (var i = 1; i <= size; i++) {
+    	        for (var j = 1; j <= size; j++) {
+    	            var k = ((i-1)* gridSize) + j;
+    	            var colorNum = (k-1%16).toString(16);
+        	        //document.getElementById(id).innerHTML += "\n" + "<li class='ui-state-default'>"+ i + "</li>";
+        	        $(id).append("<li class='ui-state-default' id='image-"+ k +"'>"+ k +"</li>");
+        	        $("#image-" + k).css("background", "#" + colorNum+colorNum+colorNum+colorNum+colorNum+colorNum);
+        	        $("#image-" + k).css("background", "#" + colorNum+colorNum+colorNum+colorNum+colorNum+colorNum+" url('images/ojo.JPG')");
+        	        //$("#image-" + k).css("background", "url('images/robot.png')");
+        	        $("#image-" + k).css("background-position", ((j-1)*(100/gridSize))+"%"+(i-1)*(100/gridSize)+"%");
+        	        $("#image-" + k).css("width", "" + cellSize-8);
+        	        $("#image-" + k).css("height", "" + cellSize-8);
+	            }
+    	    }
+    	    return;
+    	}
+    	
+    	
+    	
+    	$(function() {
+    	    fillTheGrid("#sortable", gridSize);
+    		$( "#sortable" ).sortable();
+    		$( "#sortable" ).disableSelection();
+    	});
+    	</script>
+</head>
+
+<body>
+    <div id="wrapper">
+    <div id="grid">
+
+    <ul id="sortable">
+        <!--
+    	<li class="ui-state-default">1</li>
+    	<li class="ui-state-default">2</li>
+    	<li class="ui-state-default">3</li>
+    	<li class="ui-state-default">4</li>
+    	<li class="ui-state-default">5</li>
+    	<li class="ui-state-default">6</li>
+    	<li class="ui-state-default">7</li>
+    	<li class="ui-state-default">8</li>
+    	<li class="ui-state-default">9</li>
+    	<li class="ui-state-default">10</li>
+    	<li class="ui-state-default">11</li>
+    	<li class="ui-state-default">12</li>
+    	<li class="ui-state-default">13</li>
+    	<li class="ui-state-default">14</li>
+    	<li class="ui-state-default">15</li>
+    	<li class="ui-state-default">16</li>
+    	-->
+    </ul>
+
+    </div><!-- End demo -->
+
+
+
+    <div id="footnote">
+    <p>
+    	To arrange sortable items as a grid, give them identical dimensions and
+    	float them using CSS.
+    </p>
+    </div><!-- End demo-description -->
+    
+    <div/>
+    
+</body>
