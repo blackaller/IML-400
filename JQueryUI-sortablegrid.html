@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>JQuery intro</title>
+	<title>JQueryUI Sortable Grid Template</title>
 	<meta name="author" content="Luis Blackaller">
 	
 	<!-- this pulls jQuery from the cloud
@@ -62,7 +62,7 @@
         	        //document.getElementById(id).innerHTML += "\n" + "<li class='ui-state-default'>"+ i + "</li>";
         	        $(id).append("<li class='ui-state-default' id='image-"+ k +"'>"+ k +"</li>");
         	        $("#image-" + k).css("background", "#" + colorNum+colorNum+colorNum+colorNum+colorNum+colorNum);
-        	        $("#image-" + k).css("background", "#" + colorNum+colorNum+colorNum+colorNum+colorNum+colorNum+" url('images/ojo.JPG')");
+        	        $("#image-" + k).css("background", "url('images/ojo.JPG')");
         	        //$("#image-" + k).css("background", "url('images/robot.png')");
         	        $("#image-" + k).css("background-position", ((j-1)*(100/gridSize))+"%"+(i-1)*(100/gridSize)+"%");
         	        $("#image-" + k).css("width", "" + cellSize-marginsPaddings);
