@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Fading Slideshow Template</title>
+	<title>Swiping Slideshow Template</title>
 	<meta name="author" content="Luis Blackaller">
 	
 	<!-- this pulls jQuery from the cloud
@@ -86,6 +86,7 @@
                 $(id).append("<div id='slide-" + (i) + "'></div>");
                 $("#slide-" + (i)).append("<img src='images/" + slideNames[i] + "' />");
                 //$("#slide-" + (i)).css("background", "#" + i + i + i );
+                $("#slide-" + (i)).css("position", "absolute" );
                 if (i != visibleSlide)
                     $("#slide-" + (i)).css("display", "none" );
 
@@ -143,33 +144,33 @@
                 $( id ).effect( "fade", 500, callback );
             };
 
-            function toggleFade(forward) {
+            function toggleSwipe(forward) {
                 if (forward){
-                    $( "#slide-" + visibleSlide ).effect( "fade", 200);
-                    setTimeout(function() {
-                        $( "#slide-" + (visibleSlide + 1)%slideNames.length ).removeAttr( "style" ).hide().fadeIn();
-                            visibleSlide = (visibleSlide + 1)%slideNames.length;
-                    }, 500 );
+                    $( "#slide-" + (visibleSlide)%slideNames.length ).hide("slide", { direction: "right" }, 600);
 
-                }
-                else //backwards ^_^
-                {
-                    $( "#slide-" + visibleSlide ).effect( "fade", 200);
+                    $( "#slide-" + (visibleSlide + 1)%slideNames.length ).show("slide", { direction: "left" }, 600);
+                            visibleSlide = (visibleSlide + 1)%slideNames.length;
+                    /*
                     setTimeout(function() {
-                        $( "#slide-" + (visibleSlide + 4)%slideNames.length ).removeAttr( "style" ).hide().fadeIn();
-                            visibleSlide = (visibleSlide + 4)%slideNames.length;
-                    }, 500 );
+                        $( "#slide-" + (visibleSlide + 1)%slideNames.length ).show("slide", { direction: "left" }, 600);
+                            visibleSlide = (visibleSlide + 1)%slideNames.length;
+                    }, 200 );
+                    */
+                        
+                    
+
+
                 }
             };
 
             fillTheCarrousell("#toggler", slideNames.length);
 
             $( ".next" ).click(function() {
-                toggleFade(true);
+                toggleSwipe(true);
                 return false;
             });
             $( ".previous" ).click(function() {
-                toggleFade(false);
+                toggleSwipe(false);
                 return false;
             });
         });
@@ -183,11 +184,10 @@
     <div id="big-box">
 
     <div id="footnote">
-        <h2>Here is a simple fading slideshow</h2>
+        <h2>Here another simple slideshow</h2>
     </div><!-- End footnote -->
 
         <div class="navigation">
-            <a href="#" class="previous">Previous</a> -
             <a href="#" class="next">Next</a> 
         </div>
 
@@ -227,10 +227,6 @@
 
         <a href="#" id="button" class="ui-state-default ui-corner-all">Run Effect</a>
         -->
-        <div class="navigation">
-            <a href="#" class="previous">Previous</a> -
-            <a href="#" class="next">Next</a> 
-        </div>
     </div>
     
     <div/>
