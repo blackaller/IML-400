@@ -24,16 +24,24 @@ $(window).load(
 		var latitude = new Array();
 		var zoom = new Array();
 
+
+		//Mexico City
+		//London
+		longitude[0] = 19.35031;
+		latitude[0] =  -99.17922;
+		zoom[0] = 18;
+
+
 		//Swiss Alps
-		longitude[0] = 46.655647;
-		latitude[0] = 8.336563;
-		zoom[0] = 14;
+		longitude[1] = 46.655647;
+		latitude[1] = 8.336563;
+		zoom[1] = 14;
 
 
 		//Sahara
-		longitude[1] = 24.866503;
-		latitude[1] = 4.993286;
-		zoom[1] = 12;
+		longitude[2] = 24.866503;
+		latitude[2] = 4.993286;
+		zoom[2] = 12;
 
 
 		//Dubai
@@ -41,6 +49,7 @@ $(window).load(
 		latitude[3] = 55.316076;
 		zoom[3] = 16;
 		
+		/*
 		//Sahara
 		longitude[2] = 25.451955;
 		latitude[2] = 5.710831;
@@ -51,7 +60,26 @@ $(window).load(
 		longitude[4] = -19.660915;
 		latitude[4] = -66.945835;
 		zoom[4] = 14;
+		*/
 		
+		//Los Angeles
+		longitude[4] = 33.87258;
+		latitude[4] = -118.288031;
+		zoom[4] = 17;
+
+		//Tokyo
+		longitude[5] = 35.677806;
+		latitude[5] = 139.712931;
+		zoom[5] = 17;
+
+		//London
+		longitude[6] = 51.502999;
+		latitude[6] = -0.123446;
+		zoom[6] = 16;
+
+
+
+
 		/*
 		//Hawaii
 		longitude[5] = 19.60746;
