@@ -46,7 +46,6 @@ longitude[2] = 24.866503;
 latitude[2] = 4.993286;
 zoom[2] = 12;
 
-
 //Dubai
 place[3] = "Dubai";
 longitude[3] = 25.281198;
@@ -84,8 +83,23 @@ longitude[6] = 51.502999;
 latitude[6] = -0.123446;
 zoom[6] = 16;
 
+//Sao Paulo
+place[7] = "Sao Paulo";
+longitude[7] = -23.660749;
+latitude[7] = -46.536015;
+zoom[7] = 17;
 
+//Cambridge
+place[8] = "Cambridge MA";
+longitude[8] = 42.3877;
+latitude[8] = -71.1194;
+zoom[8] = 18;
 
+//Cardiff
+place[9] = "Cardiff";
+longitude[9] = 51.47772;
+latitude[9] = -3.17687;
+zoom[9] = 18;
 
 /*
 //Hawaii
