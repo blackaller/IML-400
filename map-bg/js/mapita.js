@@ -23,28 +23,32 @@ var i = 0;
 var longitude = new Array();
 var latitude = new Array();
 var zoom = new Array();
+var location = new Array();
 
 
 //Mexico City
-//London
+location[0] = "Mexico City";
 longitude[0] = 19.35031;
 latitude[0] =  -99.17922;
 zoom[0] = 18;
 
 
 //Swiss Alps
+location[1] = "Swiss Alps";
 longitude[1] = 46.655647;
 latitude[1] = 8.336563;
 zoom[1] = 14;
 
 
 //Sahara
+location[2] = "Sahara";
 longitude[2] = 24.866503;
 latitude[2] = 4.993286;
 zoom[2] = 12;
 
 
 //Dubai
+location[3] = "Dubai";
 longitude[3] = 25.281198;
 latitude[3] = 55.316076;
 zoom[3] = 16;
@@ -63,16 +67,19 @@ zoom[4] = 14;
 */
 
 //Los Angeles
+location[4] = "Los Angeles";
 longitude[4] = 33.87258;
 latitude[4] = -118.288031;
 zoom[4] = 17;
 
 //Tokyo
+location[5] = "Tokyo";
 longitude[5] = 35.677806;
 latitude[5] = 139.712931;
 zoom[5] = 17;
 
 //London
+location[6] = "London";
 longitude[6] = 51.502999;
 latitude[6] = -0.123446;
 zoom[6] = 16;
@@ -152,7 +159,8 @@ function setLocation (new_i) {
 	if (new_i == -1) i = Math.floor( Math.random() * longitude.length);
 	else i = new_i;
 	y = 0;
-	map.setCenter(new GLatLng(longitude[i],latitude[i]), zoom[i]);		
+	map.setCenter(new GLatLng(longitude[i],latitude[i]), zoom[i]);
+	$("#map-location").append(" " + location[i]);	
 }
 
 
@@ -170,6 +178,7 @@ function load() {
 		map.setCenter(new GLatLng(longitude[i],latitude[i]), zoom[i]);
 		
 		map.setMapType(G_SATELLITE_MAP );
+
 	}
 }
 
