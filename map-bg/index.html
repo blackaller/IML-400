@@ -11,8 +11,23 @@ html, body {
 	height:100%;
 }
 h1{
-	text-align: center;
 	font-size:60px;
+	padding:0;
+	margin:0;
+}
+h2{
+	padding:0;
+	margin:0;
+}
+a{
+	text-decoration:none;
+	color:#eee;
+}
+a:hover{
+	color:#fff;
+}
+#cabeza{
+	text-align: center;
 	text-shadow: 0 00 0.5em rgba(255,255,255,0.8);
 	background:rgba(0,0,0,0.2);
 	box-shadow: 0 00 0.5em rgba(0,0,0,0.2);
@@ -47,17 +62,19 @@ h1{
 
 
 
-
 </head>
 
 <body onload="load()" onunload="GUnload()">
 	<div id="map"></div>
 	
 	<div id="wrapper">
-		<h1 id="map-location">Hello</h1>
-		<!--
-		<img src="images/ojo.jpg" width="300px" height="300px" />
-		-->
+		<div id="cabeza">
+			<h1 id="map-location">Hello</h1>
+			<h2><a href="#">Take me elsewhere</a></h2>
+			<!--
+			<img src="images/ojo.jpg" width="300px" height="300px" />
+			-->
+		</div>	
 	</div>
 
 </body>
