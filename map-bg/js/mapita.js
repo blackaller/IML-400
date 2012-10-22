@@ -101,6 +101,13 @@ longitude[9] = 51.47772;
 latitude[9] = -3.17687;
 zoom[9] = 18;
 
+//Oaxaca
+place[10] = "Oaxaca";
+longitude[10] = 17.06677;
+latitude[10] = -96.72305;
+zoom[10] = 18;
+
+
 /*
 //Hawaii
 longitude[5] = 19.60746;
