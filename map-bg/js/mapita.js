@@ -107,6 +107,13 @@ longitude[10] = 17.06677;
 latitude[10] = -96.72305;
 zoom[10] = 18;
 
+//IML
+place[11] = "USC IML";
+longitude[11] = 34.02963;
+latitude[11] = -118.27994;
+zoom[11] = 18;
+
+
 
 /*
 //Hawaii
