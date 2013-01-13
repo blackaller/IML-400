@@ -9,17 +9,17 @@
         function animate(div) {
             if ( step ){
                 div.style.color="crimson";
-                div.style.background="gold";
+                //div.style.background="gold";
             }
             else{
                 div.style.color="gold";
-                div.style.background="crimson";
+                //div.style.background="crimson";
             }
 
             step = !step;
             setTimeout(function () {
                 animate(div);
-            }, 25000);
+            }, 2500);
         }
 
         window.onload = function () {
@@ -30,9 +30,10 @@
 
     <style>
         body{
+            margin:0;
             color: #eee;
             background: #222;
-            min-width:1220px;
+            /*min-width:1220px;*/
         }
         }
         a{
@@ -51,17 +52,27 @@
         
         .hi{
             text-align:center;
+            margin:40px;
 
         }
         #hello{
             font-weight: bold;
             font-size: 5em;
-            background: gold;
+            /*background: gold;*/
             color: crimson;
+        }
+        #header{
+            background:black;
+            margin:0;
+            padding:10px 40px;
+        }
+        #header h3{
+            margin:0;
+            padding:0px;
         }
         #wrapper{
             width: 720px;
-            margin:40px auto;
+            margin:0px auto;
 
         }
         #footer{
@@ -87,6 +98,10 @@
 </head>
 
 <body>
+    <div id="header">
+        <h3>Time Machine <a href="fall-2012/" target="blank">Fall 2012</a></h3>
+    </div>
+
     <div id="wrapper">
 
         <div class="hi" id="hello">
@@ -100,8 +115,5 @@
         
     </div>
 
-    <div id="footer">
-        <h3>Time Machine <a href="fall-2012/" target="blank">Fall 2012</a></h3>
-    </div>
 </body>
 </html>
