@@ -44,6 +44,9 @@
             font-size: 1em;
             text-align: left;
         }
+        .interior{
+            padding:5px 10px;
+        }
         </style>
         <script>
         var gridSize=5;
@@ -60,7 +63,7 @@
                     var k = ((i-1) * gridSize) + j;
                     var colorNum = (k-1%16).toString(16);
                     //document.getElementById(id).innerHTML += "\n" + "<li class='ui-state-default'>"+ i + "</li>";
-                    $(id).append("<li class='ui-state-default' id='image-"+ k +"'>"+ k +"</li>");
+                    $(id).append("<li class='ui-state-default' id='image-"+ k +"'><div class='interior'>" + k + "</div></li>");
                     $("#image-" + k).css("background", "#" + colorNum+colorNum+colorNum+colorNum+colorNum+colorNum);
                     $("#image-" + k).css("background", "url('images/ojo.JPG')");
                     $("#image-" + k).css("background-size", gridSize * cellSize );
