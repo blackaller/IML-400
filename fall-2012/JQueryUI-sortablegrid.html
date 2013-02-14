@@ -46,10 +46,10 @@
     	}
     	</style>
     	<script>
-    	var gridSize=4;
+    	var gridSize=5;
     	var cellSize=140;
-    	var margin=2;
-    	var padding=2;
+    	var margin=0;
+    	var padding=0;
     	var marginsPaddings=2*(margin+padding);
     	function fillTheGrid(id, size){
     	    var sizeSquared = size * size;    
@@ -57,14 +57,15 @@
     	    $(id).html("");
     	    for (var i = 1; i <= size; i++) {
     	        for (var j = 1; j <= size; j++) {
-    	            var k = ((i-1)* gridSize) + j;
+    	            var k = ((i-1) * gridSize) + j;
     	            var colorNum = (k-1%16).toString(16);
         	        //document.getElementById(id).innerHTML += "\n" + "<li class='ui-state-default'>"+ i + "</li>";
         	        $(id).append("<li class='ui-state-default' id='image-"+ k +"'>"+ k +"</li>");
         	        $("#image-" + k).css("background", "#" + colorNum+colorNum+colorNum+colorNum+colorNum+colorNum);
         	        $("#image-" + k).css("background", "url('images/ojo.JPG')");
+                    $("#image-" + k).css("background-size", gridSize * cellSize );
         	        //$("#image-" + k).css("background", "url('images/robot.png')");
-        	        $("#image-" + k).css("background-position", ((j-1)*(100/gridSize))+"%"+(i-1)*(100/gridSize)+"%");
+        	        $("#image-" + k).css("background-position", ((gridSize -j-1)*cellSize) + "px" + " " + ((i-1)*cellSize) + "px");
         	        $("#image-" + k).css("width", "" + cellSize-marginsPaddings);
         	        $("#image-" + k).css("height", "" + cellSize-marginsPaddings);
         	        $("#image-" + k).css("margin", + margin+"px");
