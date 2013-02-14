@@ -46,8 +46,8 @@
         }
         </style>
         <script>
-        var gridSize=6;
-        var cellSize=140;
+        var gridSize=5;
+        var cellSize=120;
         var margin=0;
         var padding=0;
         var marginsPaddings=2*(margin+padding);
@@ -65,7 +65,7 @@
                     $("#image-" + k).css("background", "url('images/ojo.JPG')");
                     $("#image-" + k).css("background-size", gridSize * cellSize );
                     //$("#image-" + k).css("background", "url('images/robot.png')");
-                    $("#image-" + k).css("background-position", ( gridSize - (j-1) * cellSize ) + "px" + " " + ( gridSize - (i-1) * cellSize ) + "px");
+                    $("#image-" + k).css("background-position", ( (1-j) * cellSize ) + "px" + " " + ( (1-i) * cellSize ) + "px");
                     $("#image-" + k).css("width", "" + cellSize-marginsPaddings);
                     $("#image-" + k).css("height", "" + cellSize-marginsPaddings);
                     $("#image-" + k).css("margin", + margin+"px");
