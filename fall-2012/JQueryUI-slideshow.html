@@ -80,6 +80,20 @@
         slideNames[2] = "roboteena.png";
         slideNames[3] = "robobaby.png";
         slideNames[4] = "robobabe.png";
+
+        function arrayShuffle(theArray) {
+            var len = theArray.length;
+            var i = len;
+             while (i--) {
+                var p = parseInt(Math.random()*len);
+                var t = theArray[i];
+                theArray[i] = theArray[p];
+                theArray[p] = t;
+            }
+        };
+
+        arrayShuffle(slideNames); 
+
         visibleSlide = Math.floor((Math.random()*5));
 
         function fillTheCarrousell(id, size){
