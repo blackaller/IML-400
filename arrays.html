@@ -1,0 +1,105 @@
+<html>
+<head>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <style>
+    body{
+        background:#eee;
+        margin:0;
+    }
+    #wrapper{
+        width:800px;
+        margin:150px auto;
+    }
+    .array-cell{
+        width:100px;
+        height:400px;
+        float:left;
+        box-shadow: 0 0 8px 0 rgba(0,0,0,0.3);
+    }
+  
+    </style>
+
+    <script>
+
+        var gradient = new Array;
+        var gradientLength = 8;
+        var colorNum = 0;
+
+
+        for (var i = 0; i < gradientLength; i++) {
+                colorNum = (2*i%16).toString(16);
+                gradient[i] = "#" + "0" + colorNum + colorNum;
+
+            }
+
+
+
+        function printGradient(id, array){
+            $(id).empty();
+            $(id).append("<div class='printed-array'></div>");
+
+            for (var i = 0; i < array.length; i++) {
+                $(id).append("<div class='array-cell' id='cell-" + i + "'></div>");
+                $("#cell-" + i).css("background", array[i]);
+
+            }
+
+        }
+
+        function arrayShuffle(theArray) {
+            var len = theArray.length;
+            var i = len;
+             while (i--) {
+                var p = parseInt(Math.random()*len);
+                var t = theArray[i];
+                theArray[i] = theArray[p];
+                theArray[p] = t;
+            }
+        };
+
+        function animatedArrayShuffle(theArray) {
+            var len = theArray.length;
+            var i = len;
+
+             while (i--) {
+                
+                printGradient("#wrapper", theArray)
+                alert("step " + (len - i));
+                var p = parseInt(Math.random()*len);
+                var t = theArray[i];
+                theArray[i] = theArray[p];
+                theArray[p] = t;
+
+            }
+        };
+
+        function shuffle(id, array) {
+            //$(id).empty();
+            printGradient(id, array);
+            arrayShuffle(array);
+
+            setTimeout(function () {
+                shuffle(id, array);
+            }, 300);
+        }
+
+        $(function() {
+            
+            //shuffle("#wrapper", Gradient);
+
+            animatedArrayShuffle(gradient);
+
+
+            //$(".array-cell").mouseover(function () {
+            //   $(this).css("background","red");
+            //});
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+    </div>
+
+
+</body>
+</html>
