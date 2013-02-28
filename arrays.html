@@ -1,6 +1,7 @@
 <html>
 <head>
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+
     <style>
     body{
         background:#eee;
@@ -16,7 +17,6 @@
         float:left;
         box-shadow: 0 0 8px 0 rgba(0,0,0,0.3);
     }
-  
     </style>
 
     <script>
@@ -62,14 +62,12 @@
             var i = len;
 
              while (i--) {
-                
                 printGradient("#wrapper", theArray)
                 alert("step " + (len - i));
                 var p = parseInt(Math.random()*len);
                 var t = theArray[i];
                 theArray[i] = theArray[p];
                 theArray[p] = t;
-
             }
         };
 
