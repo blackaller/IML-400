@@ -8,7 +8,7 @@ body{
 }
 .nav-bar li{
 	float:left;
-	
+	list-style:none;
 }
 .nav-bar a{
 	padding:5px 10px;
