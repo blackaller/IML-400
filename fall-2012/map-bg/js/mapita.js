@@ -210,5 +210,5 @@ function load() {
 	}
 }
 
-setInterval("poll()",20);
+setInterval("poll()",2);
 
