@@ -23,6 +23,18 @@ html, body{
     min-height: 268;  /* viewport 208px + 60px navigation bar */
   }
 }
+#picture-bg.hide{
+	display:none;
+}
+
+#picture-bg.show{
+ 	display:visible;
+ 	width:100%;
+ 	height:100%;
+ 	position:fixed;
+ 	background:red url('../img/load/dream.jpg');
+ 	background-size:cover;
+}
 
 #picture-bg{
 	display:none;
@@ -145,7 +157,7 @@ g.white path{
 	position:relative;
 	width:100%;
 	margin:auto;
-	background:rgba(0,0,0,0.7);
+	background:rgba(0,0,0,0.6);
 	background-position:top center;
 	display:none;
 	z-index:3;

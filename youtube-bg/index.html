@@ -31,9 +31,18 @@
 
     		var options = {};
 			options = randomTube(tube);
-			//options = tube.cookiethumper;
 
-			$('#video-bg').tubular(options);
+
+			if (!iOS_iphone) $('#video-bg').tubular(options);
+			else {
+				$('#picture-bg').addClass('show').removeClass('hide');
+				$('#picture-bg').css('background', 'url(' + randomBg().url + ')');
+				$('#picture-bg').css('background-size', 'cover');
+				$('#picture-bg').css('background-position', 'center');
+			}
+
+
+
 			$('#video-overlay').add('#top-bar').add('#intro-blurb').hide();
 
 		    setTimeout(function(){
@@ -51,7 +60,9 @@
 
 <body>
 	<div id="video-bg" class="clearfix"></div>
-	<div id="picture-bg" class="clearfix"></div>
+
+	<div id="picture-bg" class="clearfix hide"></div>
+
 
 	<section id='video-overlay'>
 		<div id="intro-blurb" class="show">

@@ -36,6 +36,52 @@ var tube = {
 	}
 };
 
+/*	Static Backgrounds  */
+
+var bgImages = {
+	ball: {
+		name: 'ball.jpg',
+		url: 'img/load/ball.jpg'
+	},
+	dream: {
+		name: 'dream.jpg',
+		url: 'img/load/dream.jpg'
+	},
+	famous: {
+		name: 'famous.jpg',
+		url: 'img/load/famous.jpg'
+	},
+	friendship: {
+		name: 'friendship.jpg',
+		url: 'img/load/friendship.jpg'
+	},
+	hero: {
+		name: 'hero.jpg',
+		url: 'img/load/hero.jpg'
+	},
+	history: {
+		name: 'history.jpg',
+		url: 'img/load/history.jpg'
+	},
+	lookit: {
+		name: 'lookit.jpg',
+		url: 'img/load/lookit.jpg'
+	},
+	party: {
+		name: 'party.jpg',
+		url: 'img/load/party.jpg'
+	},
+	princess: {
+		name: 'princess.jpg',
+		url: 'img/load/princess.jpg'
+	},
+	quest: {
+		name: 'quest.jpg',
+		url: 'img/load/quest.jpg'
+	}
+
+};
+
 /*	COLOR PALETTE  */
 
 var tubeColors = {
@@ -151,6 +197,12 @@ function randomPalette(){
 		colorClass + ' .quote{ background:'+ hexString +'; }'
 	);
 	*/
+}
+
+function randomBg(){
+	var getBg = {};
+	getBg = randomItem(bgImages);
+	return getBg;
 }
 
 function randomTube(myTubes){
