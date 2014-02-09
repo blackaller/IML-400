@@ -24,6 +24,22 @@ html, body{
   }
 }
 
+#picture-bg{
+	display:none;
+}
+
+.ios #video-bg{
+ 	display:none;
+}
+
+.ios #picture-bg{
+ 	display:visible;
+ 	background:yellow;
+ 	background-size:cover;
+}
+
+
+
 ::-webkit-scrollbar { 
 	display: none;
 }
