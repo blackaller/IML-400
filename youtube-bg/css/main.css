@@ -36,10 +36,6 @@ html, body{
  	background-size:cover;
 }
 
-#picture-bg{
-	display:none;
-}
-
 .ios #video-bg{
  	display:none;
 }
