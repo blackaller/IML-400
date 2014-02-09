@@ -27,13 +27,6 @@ var tube = {
 		playButtonClass: 'tubular-play',
 		pauseButtonClass: 'tubular-pause'
 	},
-	strandbeest: {
-		videoId: 'MYGJ9jrbpvg',
-		start: 24,
-		ratio: 16/9,
-		playButtonClass: 'tubular-play',
-		pauseButtonClass: 'tubular-pause'
-	},
 	firebaby: {
 		videoId: 'HcXNPI-IPPM',
 		start: 140,

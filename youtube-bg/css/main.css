@@ -160,7 +160,7 @@ g.white path{
 	position:relative;
 	width:100%;
 	height:auto;
-	//background:#121212;
+	/*background:#121212;*/
 }
 
 .link-bar{
@@ -307,7 +307,7 @@ g.white path{
 #footer{
 	position:relative;
 	width:100%;
-	background:#111;
+	/*background:#111;*/
 	color:#eee;
 	font-weight: 400; 
 	padding-top:80px;
