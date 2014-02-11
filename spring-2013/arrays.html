@@ -37,6 +37,7 @@
 
 
         function printGradient(id, array){
+            //$(id).delay(200).fadeOut( 30 );
             $(id).empty();
             $(id).append("<div class='printed-array'></div>");
 
@@ -45,7 +46,7 @@
                 $("#cell-" + i).css("background", array[i]);
 
             }
-
+            //$(id).fadeIn( 30 );
         }
 
         function arrayShuffle(theArray) {
@@ -59,18 +60,30 @@
             }
         };
 
-        function animatedArrayShuffle(theArray) {
+        function animatedArrayShuffle(theArray, theID, withAlert) {
             var len = theArray.length;
             var i = len;
-
-             while (i--) {
-                printGradient("#wrapper", theArray)
-                alert("step " + (len - i));
+            
+            while (i--) {
+                printGradient(theID, theArray);
+                console.log("step " + (len - i));
+                if (withAlert) alert("step " + (len - i));
                 var p = parseInt(Math.random()*len);
                 var t = theArray[i];
                 theArray[i] = theArray[p];
                 theArray[p] = t;
             }
+           
+            /*
+             while (i--) {
+                printGradient("#wrapper", theArray)
+                //alert("step " + (len - i));
+                var p = parseInt(Math.random()*len);
+                var t = theArray[i];
+                theArray[i] = theArray[p];
+                theArray[p] = t;
+            }
+            */
         };
 
         function shuffle(id, array) {
@@ -84,10 +97,14 @@
         }
 
         $(function() {
-            
+            var wantAlert;
             //shuffle("#wrapper", Gradient);
+            wantAlert = prompt("want alert?");
+            console.log(wantAlert);
+            if (wantAlert == "true" || wantAlert == "yes") wantAlert = true;
+            else wantAlert = false;
 
-            animatedArrayShuffle(gradient);
+            animatedArrayShuffle(gradient, "#wrapper", wantAlert);
 
 
             //$(".array-cell").mouseover(function () {
