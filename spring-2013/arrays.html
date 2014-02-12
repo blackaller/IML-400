@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.1, user-scalable=no">
+
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 
     <style>
@@ -10,49 +12,62 @@
         margin:0;
     }
     #wrapper{
-        width:1200px;
-        margin:150px auto;
+        position:relative;
+        margin:80px auto;
+    }
+    .printed-array{
+        position:relative;
+        width:100%;
     }
     .array-cell{
-        width:100px;
+        position:relative;
         height:400px;
         float:left;
-        box-shadow: 0 0 8px 0 rgba(0,0,0,0.3);
+        box-shadow: 0 0 4px 0 rgba(0,0,0,0.3);
+    }
+    #counter{
+        height:222px;
+        position:relative;
+        color:#333333;
+        font-size:222px;
+        font-family: arial;
+        font-weight:bold;
+        text-shadow: 0px 0px 8px rgba(0,0,0,0.3);
+        text-align:right;
+        margin:80px 40px 0 0 ;
     }
     </style>
 
     <script>
 
         var gradient = new Array;
-        var gradientLength = 16;
+        var gradientLength = 16; // only powers of 2 for now :D
         var cellWidth = 80;
         var counter = gradientLength; // for the animation
 
-        function fillGradient(array, size){
+        function fillGradient(array, size, id){
             var colorNum = 0;
             if (size > 16) size = 16;
 
             for (var i = 0; i < size; i++) {
                 colorNum = ((16/size)*i%16).toString(16);
-                array[i] = "#" + colorNum + colorNum + colorNum;
-
+                array[i] = "#" + colorNum + colorNum + colorNum + colorNum + colorNum + colorNum;
             }
-            $("#wrapper").css( 'width', size * cellWidth + "px" );
-        }    
 
+            $(id).css( 'width', size * cellWidth + "px" );
+        }    
 
         function printGradient(id, array){
             $(id).empty();
-            $(id).append("<div class='printed-array'></div>");
-
+            
+            $(id).append("<div class='printed-array'></div>");          
             for (var i = 0; i < array.length; i++) {
                 $(id).append("<div class='array-cell' id='cell-" + i + "'></div>");
                 $("#cell-" + i).css("background", array[i]);
                 $(".array-cell").css( 'width', cellWidth + "px");
-
             }
+            $(id).append("<div id='counter'></div>");  
         }
-
 
         function shuffleStep(int, array){
             var p = parseInt(Math.random()*array.length);
@@ -66,10 +81,13 @@
             var i = len - 1;
 
             var timerId = setTimeout(function(){
+
                 console.log('Begin step ' + ( 1 + len - counter));
                 if (withAlert) alert("Do step " + ( 1 + len - counter) + "?");
-                console.log(theArray); 
+                console.log(theArray);
+
                 printGradient(theID, theArray);
+                $("#counter").append(( 1 + len - counter) + '');
                 counter = counter-1;
                 shuffleStep(counter, theArray);
                 if (counter > 0 ) console.log('Preparing step ' + ( 1 + len - counter));
@@ -81,8 +99,7 @@
         };
 
         $(function(wantAlert) {
-            
-            fillGradient(gradient, gradientLength);
+            fillGradient(gradient, gradientLength, "#wrapper");
             printGradient("#wrapper", gradient);
 
             wantAlert = prompt("Want alerts? Answer yes/no");
@@ -94,14 +111,12 @@
                 wantAlert = false;
 
             animatedArrayShuffle(gradient, "#wrapper", wantAlert);
-
         });
     </script>
 </head>
+
 <body>
     <div id="wrapper">
     </div>
-
-
 </body>
 </html>
