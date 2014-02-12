@@ -10,7 +10,7 @@
         margin:0;
     }
     #wrapper{
-        width:800px;
+        width:1200px;
         margin:150px auto;
     }
     .array-cell{
@@ -24,92 +24,77 @@
     <script>
 
         var gradient = new Array;
-        var gradientLength = 8;
-        var colorNum = 0;
+        var gradientLength = 16;
+        var cellWidth = 80;
+        var counter = gradientLength; // for the animation
 
+        function fillGradient(array, size){
+            var colorNum = 0;
+            if (size > 16) size = 16;
 
-        for (var i = 0; i < gradientLength; i++) {
-                colorNum = (2*i%16).toString(16);
-                gradient[i] = "#" + "0" + colorNum + colorNum;
+            for (var i = 0; i < size; i++) {
+                colorNum = ((16/size)*i%16).toString(16);
+                array[i] = "#" + colorNum + colorNum + colorNum;
 
             }
-
+            $("#wrapper").css( 'width', size * cellWidth + "px" );
+        }    
 
 
         function printGradient(id, array){
-            //$(id).delay(200).fadeOut( 30 );
             $(id).empty();
             $(id).append("<div class='printed-array'></div>");
 
             for (var i = 0; i < array.length; i++) {
                 $(id).append("<div class='array-cell' id='cell-" + i + "'></div>");
                 $("#cell-" + i).css("background", array[i]);
+                $(".array-cell").css( 'width', cellWidth + "px");
 
             }
-            //$(id).fadeIn( 30 );
         }
 
-        function arrayShuffle(theArray) {
-            var len = theArray.length;
-            var i = len;
-             while (i--) {
-                var p = parseInt(Math.random()*len);
-                var t = theArray[i];
-                theArray[i] = theArray[p];
-                theArray[p] = t;
-            }
-        };
+
+        function shuffleStep(int, array){
+            var p = parseInt(Math.random()*array.length);
+            var t = array[int];
+            array[int] = array[p];
+            array[p] = t;
+        }
 
         function animatedArrayShuffle(theArray, theID, withAlert) {
             var len = theArray.length;
-            var i = len;
-            
-            while (i--) {
+            var i = len - 1;
+
+            var timerId = setTimeout(function(){
+                console.log('Begin step ' + ( 1 + len - counter));
+                if (withAlert) alert("Do step " + ( 1 + len - counter) + "?");
+                console.log(theArray); 
                 printGradient(theID, theArray);
-                console.log("step " + (len - i));
-                if (withAlert) alert("step " + (len - i));
-                var p = parseInt(Math.random()*len);
-                var t = theArray[i];
-                theArray[i] = theArray[p];
-                theArray[p] = t;
-            }
-           
-            /*
-             while (i--) {
-                printGradient("#wrapper", theArray)
-                //alert("step " + (len - i));
-                var p = parseInt(Math.random()*len);
-                var t = theArray[i];
-                theArray[i] = theArray[p];
-                theArray[p] = t;
-            }
-            */
+                counter = counter-1;
+                shuffleStep(counter, theArray);
+                if (counter > 0 ) console.log('Preparing step ' + ( 1 + len - counter));
+                else console.log('Done shuffling');
+                animatedArrayShuffle(theArray, theID, withAlert);
+            }, 666);
+
+            if ((counter<=0) || (counter>20)) clearTimeout(timerId);
         };
 
-        function shuffle(id, array) {
-            //$(id).empty();
-            printGradient(id, array);
-            arrayShuffle(array);
+        $(function(wantAlert) {
+            
+            fillGradient(gradient, gradientLength);
+            printGradient("#wrapper", gradient);
 
-            setTimeout(function () {
-                shuffle(id, array);
-            }, 300);
-        }
-
-        $(function() {
-            var wantAlert;
-            //shuffle("#wrapper", Gradient);
-            wantAlert = prompt("want alert?");
+            wantAlert = prompt("Want alerts? Answer yes/no");
             console.log(wantAlert);
-            if (wantAlert == "true" || wantAlert == "yes") wantAlert = true;
-            else wantAlert = false;
+
+            if (wantAlert == "true" || wantAlert == "yes")
+                wantAlert = true;
+            else
+                wantAlert = false;
 
             animatedArrayShuffle(gradient, "#wrapper", wantAlert);
 
-
-            //$(".array-cell").mouseover(function () {
-            //   $(this).css("background","red");
-            //});
         });
     </script>
 </head>
