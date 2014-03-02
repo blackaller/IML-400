@@ -62,13 +62,18 @@
 	</style>
 	<script>
 	$(document).ready(function () {
+
 	        $(".button").click(function (){
+
 	        	$(".button").css("opacity", 0.5);
 
 	   			$(this).css("opacity", 1);
+	   			// "button yellow" -> ["button", "yellow"] -> "yellow" -> ".yellow"
 	   			$("." + $(this).attr('class').split(' ')[1] ).css("opacity", 1);
 
+	   			//turns off all sections
 	   			$(".section").css("display", "none");
+	   			//turns an "this" section
 	   			$("." + $(this).attr('class').split(' ')[1]).css("display", "block");
 	   			
 	   			if ( $(".button").attr('class').split(' ')[1] != $(this).attr('class').split(' ')[1] )
@@ -80,14 +85,14 @@
 						    $(this).css("opacity", 0.5);
 					});
 	        	}
-
+	        	
 	        	$("." + $(this).attr('class').split(' ')[1]).hover( function () {
 					    $(this).css("opacity", 1);
 					},
 					function () {
 					    $(this).css("opacity", 1);
 				});
-
+				
 	        	//alert( $(this).attr('class').split(' ')[1] );
 	        });
 	});

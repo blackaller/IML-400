@@ -1,51 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=0.1, user-scalable=no">
-
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-    <!-- USE THIS IF YOU WANT TO CALL AN EXTERNAL JS FILE
-    <script src="js/arrayshuffler.js"></script>
-    -->
-
-    <style>
-    body{
-        background:#eee;
-        margin:0;
-    }
-    #wrapper{
-        position:relative;
-        margin:80px auto;
-    }
-    .printed-array{
-        position:relative;
-        width:100%;
-    }
-    .array-cell{
-        position:relative;
-        height:200px;
-        float:left;
-        box-shadow: 0 0 4px 0 rgba(0,0,0,0.3);
-    }
-    #counter{
-        height:222px;
-        position:relative;
-        color:#333333;
-        font-size:122px;
-        font-family: arial;
-        font-weight:bold;
-        text-shadow: 0px 0px 8px rgba(0,0,0,0.3);
-        text-align:center;
-        margin:80px 40px 0 0 ;
-    }
-    </style>
-
-    <script>
 
         var gradient = new Array;
         var gradientLength = 16; // only powers of 2 for now :D
-        var cellWidth = 40;
+        var cellWidth = 80;
         var counter = gradientLength; // for the animation
 
         function fillGradient(array, size, id){
@@ -115,11 +71,3 @@
 
             animatedArrayShuffle(gradient, "#wrapper", wantAlert);
         });
-    </script>
-</head>
-
-<body>
-    <div id="wrapper">
-    </div>
-</body>
-</html>

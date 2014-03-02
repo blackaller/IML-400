@@ -7,25 +7,22 @@
     <script>
         var step = true;
 
-        function animate(div) {
+        function animate(whatever) {
             if ( step ){
-                div.style.color="crimson";
-                //div.style.background="gold";
+                whatever.style.color="crimson";
             }
             else{
-                div.style.color="gold";
-                //div.style.background="crimson";
+                whatever.style.color="gold";
             }
-
             step = !step;
             setTimeout(function () {
-                animate(div);
+                animate(whatever);
             }, 500);
         }
 
         window.onload = function () {
-            var div = document.getElementById("hello");
-            animate(div);
+            var mydiv = document.getElementById("hello");
+            animate(mydiv);
         }
     </script>
 
@@ -137,8 +134,8 @@
                     <li><a href="http://storm.usc.edu/~kieranr/">Kieran Reynolds</a></li><!--kieranr ?-->
                     <li><a href="http://storm.usc.edu/~sineni/">Samantha Lynn Sineni</a></li>
                     <li><a href="http://storm.usc.edu/~siudzins/">Jasmine C. Siudzinski </a></li>
-                    <li><a href="http://storm.usc.edu/~tatecort/">Allison Tate-Cortese </a></li>
-                    <!--DROPPED <li><a href="http://storm.usc.edu/~jtrieu/">Jefferson H. Trieu</a></li>-->
+                    <!--DROPPED <li><a href="http://storm.usc.edu/~tatecort/">Allison Tate-Cortese </a></li>
+                    DROPPED <li><a href="http://storm.usc.edu/~jtrieu/">Jefferson H. Trieu</a></li>-->
                     <li><a href="http://storm.usc.edu/~kmweimer/">Katharine Mary Weimer</a></li>
                     <li><a href="http://storm.usc.edu/~lunawhit/">Luna White</a></li>
                     <li><a href="http://storm.usc.edu/~nataliaw/">Natalia Pilar Williams</a></li>
@@ -159,8 +156,8 @@
                     <li><a href="assignment-3.html" >CSS Layout Properties</a></li>
                     <li><a href="assignment-4.html" >Multiple Page Navigation</a></li>
                     <li><a href="assignment-5.html" >Intro to Javascript and jQuery</a></li>
-                    <li><a href="assignment-6.html" >jQuery plugins</a></li><!--
-                    <li><a href="assignment-7.html" >Chrome Developer Tools</a></li>
+                    <li><a href="assignment-6.html" >jQuery plugins</a></li>
+                    <li><a href="assignment-7.html" >Chrome Developer Tools</a></li><!--
                     <li><a href="assignment-8.html" >Content and Formats</a></li>
                     <li><a href="assignment-9.html" >Final Project Proposal</a></li>
                     <li><a href="assignment-10.html" >Final Project Pre-Production</a></li>
@@ -275,6 +272,5 @@
         </div>
         
     </div>
-
 </body>
 </html>
