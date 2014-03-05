@@ -1,11 +1,4 @@
 var tube = {
-	underwater: {
-		videoId: '3jSPPxXEPe4',
-		start: 8,
-		ratio: 4/3,
-		playButtonClass: 'tubular-play',
-		pauseButtonClass: 'tubular-pause'
-	},
 	antwoord: {
 		videoId: '8Uee_mcxvrw',
 		start: 42,
@@ -15,13 +8,6 @@ var tube = {
 	},
 	slotcar: {
 		videoId: 'ye_WPPgIS4Q',
-		start: 12,
-		ratio: 16/9,
-		playButtonClass: 'tubular-play',
-		pauseButtonClass: 'tubular-pause'
-	},
-	drive: {
-		videoId: 'j7LuVDejq68',
 		start: 12,
 		ratio: 16/9,
 		playButtonClass: 'tubular-play',
