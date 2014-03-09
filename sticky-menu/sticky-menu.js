@@ -3,10 +3,15 @@
 	/*======== sticky submenu ========*/
 	if(!$(".stick").length)return;
 	$(function(){
+
 		var el=$(".stick");
+		var above=$(".main");
 		var top = $(el).offset().top;
+		$(above).css("height", $( window ).height() - $(el).height());
 		$(window).on("load resize orientationchange",function(){
 			top = $(el).offset().top;//this pos may change
+			$(above).css("height", $( window ).height() - $(el).height());
+			//console.log($(".main").css("height"));
 		});
 		$(window).on("load scroll resize orientationchange", function(){
 			var stop=$(window).scrollTop();

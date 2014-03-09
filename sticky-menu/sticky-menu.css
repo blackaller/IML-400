@@ -34,14 +34,15 @@ table {font-size:inherit;font:100%;}select, input, textarea {font:99% arial,helv
 	width:100%;
 	
 	/*max-width:715px;*/
-	min-height:600px;
+	xmin-height:500px;
 	margin:auto;
 	text-align:center;
-	color:#fff;
+	color:#111;
 	font-weight:normal;
 	font-size:4vw;
 	line-height:1.2em;
-	background:lime;
+	background:lime url('http://farm8.staticflickr.com/7442/11642193984_60fc4ec32c_b.jpg') no-repeat center 66% fixed;
+    background-size:cover;
 }
 
 .main-inner{
