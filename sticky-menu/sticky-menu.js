@@ -26,15 +26,15 @@
 })();
 
 
-//------------- smooth srolling of anchor elements
+//------------- smooth scrolling of anchor elements
 $("a[href*=#]").click(function(e){
 	var hsh=$(this).attr("href");
-	var el=$(hsh.substring(hsh.indexOf("#")));//assume anchor is a real obj on page
+	var el=$(hsh.substring(hsh.indexOf("#"))); //assume anchor is a real obj on page
 	if(!el.length)return true;
 	e.preventDefault();
 	var t=el.offset().top;
 	var s=$(".stick");
-	if(s.length){//bump below the submenu a bit more
+	if(s.length){ //bump below the submenu a bit more
 		t-=s.height()+20;
 	}
 	$("html,body").animate({
