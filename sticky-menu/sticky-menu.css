@@ -127,12 +127,17 @@ table {font-size:inherit;font:100%;}select, input, textarea {font:99% arial,helv
 	height:64px;
 }
 .submenu .uparrow{
+	display:inline-block;
 	right:10px;
 	top:22px;
 	background:url("") no-repeat;
 	background:yellow;
-	width:45px;
-	height:44px;
+	color:black;
+	text-align:center;
+	vertical-align: middle;
+	width:46px;
+	height:46px;
+	padding-top:8px;
 }
 .submenu-items{
 	text-align:center;
