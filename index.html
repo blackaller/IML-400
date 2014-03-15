@@ -17,7 +17,7 @@
             step = !step;
             setTimeout(function () {
                 animate(whatever);
-            }, 500);
+            }, 4000);
         }
 
         window.onload = function () {
@@ -58,6 +58,8 @@
             font-size: 5em;
             /*background: gold;*/
             color: crimson;
+            -webkit-transition: color 4s; /* For Safari 3.1 to 6.0 */
+            transition: color 4s;
         }
         #header{
             background:black;
