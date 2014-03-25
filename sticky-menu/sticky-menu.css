@@ -166,3 +166,12 @@ table {font-size:inherit;font:100%;}select, input, textarea {font:99% arial,helv
 	background:dodgerblue;
 	background-size:19px 19px;
 }
+#footer{
+	box-sizing:border-box;
+	width:100%;
+	background:#000000;
+	text-align:center;
+	color:#eeeeee;
+	font-size:2.4em;
+	padding:240px 0 80px 0;
+}
