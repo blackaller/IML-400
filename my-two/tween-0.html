@@ -30,10 +30,11 @@
           }).appendTo(document.body);
 
           var shape = makeshape(two);
-          shape.fill = 'rgba(200, 200, 200, 0.33)';
-          shape.noFill();
+          shape.fill = 'rgb(200, 200, 200)';
+          //shape.noFill();
           shape.stroke = 'rgb(200, 200, 200)';
           shape.linewidth = 1;
+          shape.noStroke();
           shape.translation.set(- two.width / 2, two.height / 2);
           shape.shell.translation.copy(shape.translation);
 
@@ -109,12 +110,12 @@
     <div id="shapes">
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="70px" height="70px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
         <g>
-          <polygon points="-714.986,472.576 -601.285,561.429 -601.285,314.938 -539.692,267.254 -539.692,663.622 -774.098,472.576    "/>
-          <polygon points="-960.406,762.129 -1022.006,711.606 -1022.006,314.594 -960.406,267.254    "/>
+          <polygon points="-714.986,472.576 -601.285,561.429 -601.285,314.938 -539.692,267.254 -539.692,663.622 -774.098,472.576" />
+          <polygon points="-960.406,762.129 -1022.006,711.606 -1022.006,314.594 -960.406,267.254" />
           <polygon points="-955.067,761.572 -955.067,267.254 -893.376,314.729 -893.376,551.705 -893.47,635.888 -791.555,551.008 
-            -751.305,585.646    "/>
+            -751.305,585.646" />
           <polygon points="-472.771,711.606 -535.03,764.256 -791.555,543.393 -888.125,623.122 -888.025,556.739 -781.236,473.453 
-            -534.334,676.082 -534.334,267.254 -472.711,314.729    "/>
+            -534.334,676.082 -534.334,267.254 -472.711,314.729" />
         </g>
       </svg>
     </div>
