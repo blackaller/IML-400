@@ -71,10 +71,10 @@ AEROTWIST.PhotoParticles = new function()
         // set to attract mode
         mode                        = ATTRACT;
         
-        // set up the canvas, camera and scene
+        // set up the canvas, camera and scene - originally 600
         canvas                      = document.createElement('canvas');
-        canvas.width                = 600;
-        canvas.height               = 600;
+        canvas.width                = 1200;
+        canvas.height               = 1200;
         
         // the canvas is only used to analyse our pic
         context                     = canvas.getContext('2d');
@@ -113,10 +113,7 @@ AEROTWIST.PhotoParticles = new function()
         container.addEventListener('dragexit', cancel, false);
         container.addEventListener('drop', dropFile, false);
         
-        // gui events - I did these
-        // brute force, but there's a ton
-        // of improvement that *could* be 
-        // done here.
+        // gui events - brute force. Improve later
         $("#hold-particles-on").click(callbacks.holdAtOriginOn);
         $("#hold-particles-off").click(callbacks.holdAtOriginOff);
         $("#hold-particles-off").trigger('click');
@@ -304,7 +301,7 @@ AEROTWIST.PhotoParticles = new function()
     {
         scene.removeChild(particleSystem);
         particleSystem = null;
-        context.clearRect(0,0,600,600);
+        context.clearRect(0,0,1200,1200); // originally 600
     }
     
     /**
@@ -314,19 +311,24 @@ AEROTWIST.PhotoParticles = new function()
      */
     function addParticles()
     {
-        // draw in the image, and make sure it fits the canvas size :)
-        var ratio           = 1 / Math.max(image.width/600, image.height/600);
+        // draw in the image, and make sure it fits the canvas size
+        var ratio           = 1 / Math.max(image.width/1200, image.height/1200);
         var scaledWidth     = image.width * ratio;
         var scaledHeight    = image.height * ratio;
         context.drawImage(image,
                             0,0,image.width,image.height,
-                            (600 - scaledWidth) * .5, (600 - scaledHeight) *.5, scaledWidth, scaledHeight);
+                            (1200 - scaledWidth) * .5, (1200 - scaledHeight) *.5, scaledWidth, scaledHeight);
         
         // now set up the particle material
-        var material    = new THREE.ParticleBasicMaterial( { blending: THREE.BillboardBlending, map: ImageUtils.loadTexture("images/particle.png"), size: DENSITY * 1.5, opacity: 1, vertexColors:true, sizeAttenuation:true } );
+        var material    = new THREE.ParticleBasicMaterial( {    blending: THREE.BillboardBlending,
+                                                                //map: ImageUtils.loadTexture("images/particle.png"),
+                                                                size: DENSITY * 3, // originally 1.5
+                                                                opacity: 1,
+                                                                vertexColors:true,
+                                                                sizeAttenuation:true } );
         var geometry    = new THREE.Geometry();
         var pixels      = context.getImageData(0,0,WIDTH,HEIGHT);
-        var step        = DENSITY * 4;
+        var step        = DENSITY * 8; // originally 4
         var x = 0, y = 0;
         
         // go through the image pixels
@@ -342,7 +344,7 @@ AEROTWIST.PhotoParticles = new function()
                 {
                     var pixelCol    = (pixels.data[p] << 16) + (pixels.data[p+1] << 8) + pixels.data[p+2];
                     var color       = new THREE.Color(pixelCol);
-                    var vector      = new THREE.Vector3(-300 + x/4, 240 - y, 0);
+                    var vector      = new THREE.Vector3(-600 + x/4, 600 - y, 0); // for 600 it was 300,240
                     
                     // push on the particle
                     geometry.vertices.push(new THREE.Vertex(vector));
@@ -459,9 +461,9 @@ AEROTWIST.PhotoParticles = new function()
         // do that now
         if(orbitCamera)
         {
-            camera.position.x = Math.sin(orbitValue) * DEPTH;
+            camera.position.x = Math.sin(orbitValue) * DEPTH; // originally DEPTH
             camera.position.y = Math.sin(orbitValue) * 300;
-            camera.position.z = Math.cos(orbitValue) * DEPTH;
+            camera.position.z = Math.cos(orbitValue) * DEPTH; // originally DEPTH
             orbitValue += ORBIT_RATE;
         }
         
