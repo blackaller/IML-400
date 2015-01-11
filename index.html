@@ -56,7 +56,6 @@
         #hello{
             font-weight: bold;
             font-size: 5em;
-            /*background: gold;*/
             color: crimson;
             -webkit-transition: color 4s; /* For Safari 3.1 to 6.0 */
             transition: color 4s;
@@ -71,7 +70,7 @@
             padding:0px;
         }
         #wrapper{
-            width: 720px;
+            max-width: 820px;
             /*max-width: 720px;*/
             margin:0px auto;
 
@@ -83,18 +82,12 @@
             padding:0px 40px;
         }
         #student-websites, #assignments, #links{
-            width:33%;
-            /*max-width:240px;*/
+            width:272px;
             float:left;
         }
-        ul{
-            list-style-type: none;
+        ol{
             padding: 0;
             margin: auto;
-        }
-
-        ul li{
-            padding:0 5px 0 5px;
         }
     </style>
 </head>
@@ -110,36 +103,32 @@
             Hello World
         </div>
         
-        <h1>Welcome to IML 400 Spring 2015 [ <a href="syllabus-spring-2015.html" onclick="alert('this is a work in progress')">Syllabus</a> ]</h1>
-        <h3>Lecturer <a href="http://blacklog.mitplw.com/" target="blank">Luis Blackaller</a></h3>
-        <h3>Teacher Assistant <a href="http://rosemarycomella.com/" target="blank">Rosemary Comella</a></h3>
+        <h3>Welcome to IML 400 Spring 2015 [ <a href="syllabus-spring-2015.html" onclick="alert('this is a work in progress')">Syllabus</a> ]</h3>
+        <h3>Lecturer <a href="http://blacklog.mitplw.com/" target="blank">Luis Blackaller</a><br />
+        Teacher Assistant <a href="http://rosemarycomella.com/" target="blank">Rosemary Comella</a></h3>
 
         
-                <div style="overflow:auto;">
+        <div style="">
             
             <div id="student-websites">
                 <h3>Students</h3>
-                <ul>
+                <ol>
                     <li><a href=""></a></li>
                     
                     
-                </ul>
+                </ol>
             </div>
-
-
-
-
 
             <div id="assignments">
                 <h3>Assignments</h3>
-                <ul>
+                <ol>
                     <li><a href="" ></a></li>
-                </ul>
+                </ol>
             </div>
             
             <div id="links">
                 <h3>Resources</h3>
-                <ul>
+                <ol>
                     <li>
                         [Very] <a href="links.html" target="blank">Useful Links</a>
                     </li>
@@ -207,15 +196,6 @@
                         <a href="http://backbonejs.org/" target="blank">BackboneJS</a>
                     </li>
 
-                    
-                    <!--
-                    <li>
-                        <a href="http://johnpolacek.github.com/scrollorama/" target="blank">Scrollarama</a>
-                    </li>
-                    <li>
-                        <a href="http://johnpolacek.github.com/superscrollorama/" target="blank">Superscrollarama</a>
-                    </li>
-                    -->
                     <li>
                         <a href="http://stolksdorf.github.com/Parallaxjs/" target="blank">Parallax JS</a>
                     </li>
@@ -236,7 +216,7 @@
                     <li>
                         <a href="http://leafletjs.com" target="blank">Leaflet JS</a>
                     </li>
-                </ul>
+                </0l>
             </div>
             
         </div>
