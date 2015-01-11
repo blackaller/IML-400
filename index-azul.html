@@ -9,15 +9,15 @@
 
         function animate(whatever) {
             if ( step ){
-                whatever.style.color="crimson";
+                whatever.style.color="yellow";
             }
             else{
-                whatever.style.color="gold";
+                whatever.style.color="lime";
             }
             step = !step;
             setTimeout(function () {
                 animate(whatever);
-            }, 4000);
+            }, 2000);
         }
 
         window.onload = function () {
@@ -29,39 +29,40 @@
     <style>
         body{
             margin:0;
-            color: #eee;
-            background: #222;
+            color: #222;
+            background: #fefefe url('http://www.tinyiconfactory.com/images/icons/82394.png') fixed 100% 0%;
             /*min-width:1220px;*/
         }
         }
         a{
             font-weight:bold;
             text-decoration:none;
-            color:crimson;
+            color:blue;
         }
         a:link, a:visited, a:active{
             font-weight:bold;
             text-decoration:none;
-            color:crimson;
+            color:blue;
         }
         a:hover{
-            color:gold;
+            text-decoration:underline;
         }
         
         .hi{
             text-align:center;
-            margin:40px;
+            margin:40px 0;
+            background:blue;
 
         }
         #hello{
             font-weight: bold;
             font-size: 5em;
-            color: crimson;
-            -webkit-transition: color 4s; /* For Safari 3.1 to 6.0 */
-            transition: color 4s;
+            color: lime;
+            -webkit-transition: color 0.9s; /* For Safari 3.1 to 6.0 */
+            transition: color 0.9s;
         }
         #header{
-            background:black;
+            /*background:#ededed;*/
             margin:0;
             padding:10px 40px;
         }
@@ -73,7 +74,6 @@
             max-width: 820px;
             /*max-width: 720px;*/
             margin:0px auto;
-
         }
         #footer{
             margin:0;
@@ -89,10 +89,18 @@
             padding: 0;
             margin: auto;
         }
+        #wash{
+            position:fixed;
+            width:100%;
+            height:100%;
+            background:rgba(255,255,255,0.6);
+            z-index:-1;
+        }
     </style>
 </head>
 
 <body>
+    <div id="wash"></div>
     <div id="header">
         <h3>Time Machine: <a href="https://github.com/blackaller/IML-400">GitHub</a> - <a href="fall-2012/">Fall 2012</a> - <a href="spring-2013/">Spring 2013</a> - <a href="spring-2014/">Spring 2014</a></h3>
     </div>
