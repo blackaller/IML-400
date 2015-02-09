@@ -127,7 +127,7 @@
 	
 
 	<script type="application/x-javascript">
-	// add ?activate=true at end of URL for ghetto dropdown action
+	// add --- ?activate=true --- at end of URL for ghetto dropdown action
 	if ( window.location.search.substring(1) != "") var activate = window.location.search.substring(1).split("=")[1];
 	if (activate == "true"){
 		document.getElementsByTagName("img")[0].style.display = "none";
@@ -138,7 +138,8 @@
     			document.getElementsByTagName("ol")[index].children[k].className = "hide";
 			}
 
-			document.getElementsByTagName("ol")[index].onclick = function () {
+			document.getElementsByTagName("ol")[index].onclick = function (event) {
+
 				if (this.children[1].className != "hide"){
 					this.style.color = 'gold';
 
