@@ -50,6 +50,14 @@
 
         ol li{
             padding:3px 20px 0 0;
+            
+            
+        }
+        ol li.hide{
+        	display:none;
+        }
+        ol li.show{
+        	display:visible;
         }
     </style>
 </head>
@@ -111,11 +119,52 @@
 			<li><a href="fall-2012/map-bg/flyover-teleporter.html">Google Maps API Flyover Teleporter</a></li>
 			<li><a href="fall-2012/map-bg/address-to-coordinates.html">Google Maps API Address to Coordinates</a> [Currently Broken]</li>
 		</ol>
-
 		<p style="text-align:center; margin:60px 0 0 0; padding:0;">
-            <img src="fall-2012/images/roboteeno.png" style="display:block; margin:auto; width:60%;"/>
-        </p> 
+	        <img src="fall-2012/images/roboteeno.png" style="display:block; margin:auto;"/>
+	    </p> 
 	</div>
+
+	
+
+	<script type="application/x-javascript">
+	// add ?activate=true at end of URL for ghetto dropdown action
+	if ( window.location.search.substring(1) != "") var activate = window.location.search.substring(1).split("=")[1];
+	if (activate == "true"){
+		document.getElementsByTagName("img")[0].style.display = "none";
+		for (index = 0; index < document.getElementsByTagName("ol").length; ++index) {
+			document.getElementsByTagName("ol")[index].style.color = "gold";
+			document.getElementsByTagName("ol")[index].children[0].innerHTML = document.getElementsByTagName("ol")[index].children[0].innerHTML + " +";
+			for (k = 1; k < document.getElementsByTagName("ol")[index].children.length; ++k) {
+    			document.getElementsByTagName("ol")[index].children[k].className = "hide";
+			}
+
+			document.getElementsByTagName("ol")[index].onclick = function () {
+				if (this.children[1].className != "hide"){
+					this.style.color = 'gold';
+
+					this.children[0].innerHTML = this.children[0].innerHTML.split("-")[0] + "+";
+					
+					console.log(this.children[0].innerHTML);
+
+					for (index = 1; index < this.children.length; ++index) {
+		    			this.children[index].className = "hide";
+					}
+				}
+				else{
+					this.style.color = 'white';
+
+					this.children[0].innerHTML = this.children[0].innerHTML.split("+")[0] + "-";
+					
+
+					for (index = 1; index < this.children.length; ++index) {
+		    			this.children[index].className = "show";
+					}
+				}
+				//console.log(this.children[1].style.display);
+			}
+		}
+	}
+	</script>
 </body>
 </html>
 
