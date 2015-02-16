@@ -8,9 +8,12 @@
 		margin:0;
 		background:dodgerblue;
 	}
+	h1{
+		font-weight: normal;
+	}
 	section{
 		position:relative;
-		max-width:840px;
+		max-width:640px;
 		margin:auto;
 	}
 	#interactive{
@@ -18,33 +21,37 @@
 
 	}
 	textarea, #text-input{
-		position:absolute;
 		box-sizing: border-box;
 		border:0px solid black;
 		padding:0.2em 0.6em 0.3em 0.6em;
 		background:#fff;
 		color:dodgerblue;
 		margin:0;
-		width:49%;
+		width:100%;
 		height:auto;
 		font-size:30pt;
 		outline: none;
 		resize: none;
-		left:0; top:0;
+		
 	}
 	textarea:focus, #text-input:focus {
 		background:#222;
 		color:dodgerblue;
 	}
-	#outputs{
+	#reversed{
 		box-sizing: border-box;
-		position:absolute;
-		right:0; top:0;
-		width:49%;
+		width:100%;
 		color:black;
 		font-size:30pt;
 		padding:0.2em 0.6em 0.3em 0.6em;
 		word-wrap: break-word;
+		outline: none;
+		resize: none;
+		text-align:right;
+
+	}
+	#reversed:focus{
+		color:white;
 	}
 	script.visible {
 		display:block;
@@ -66,19 +73,12 @@
 	-->
 	<div id="interactive">
 		<div id="text-input" contenteditable="true">
-			type in this box
+			type here
 		</div>
 
-		<div id="outputs">
-			<span id="reversed"></span>
-			
-			<!--
-			<span id="original"></span>
-			-->
+		<div id="reversed" contenteditable="false">
 		</div>
 	</div>
-
-	<h2>Code</h2>
 
 	<script class="">
 	/* Based on http://inimino.org/~inimino/blog/javascript_live_text_input
@@ -117,12 +117,13 @@
 	   If there is a pending timeout, it cancels it.
 	   It sets a timeout to call handleChange in 50ms. */
 	 function eventHandler(){
-	  if (input.innerText == 'type in this box') input.innerText = '';
+	  if (input.innerText == 'type here') input.innerText = '';
 	  if(timeout) clearTimeout(timeout);
 	  timeout=setTimeout(handleChange, 50);
 	 }
 	 
 	 input.onkeydown=input.onkeyup=input.onclick=eventHandler;
+	 reversed.onkeydown=reversed.onkeyup=reversed.onclick=eventHandler;
 	}
 	 
 	setupUpdater();
