@@ -110,7 +110,8 @@
 	  var newText=input.innerText;
 	  if (newText==oldText) return; else oldText=newText;
 	  set(reversed, reverse(newText));
-	  set(count, newText.length +' characters');
+	  if (newText.length==1) set(count, newText.length +' character');
+	  if (newText.length>1) set(count, newText.length +' characters');
 	  // set(orig, newText);
 	 }
 	 
