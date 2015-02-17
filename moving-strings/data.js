@@ -1,3 +1,7 @@
+/*
+ORIGINAL TEXT DOWNLOADED FROM PROJECT GUTENBERG: https://www.gutenberg.org/ebooks/902 and https://www.gutenberg.org/cache/epub/902/pg902.txt 
+*/
+
 var selfishGiant = {
 	'author': 'Oscar Wilde',
 	'title': 'The Selfish Giant',
