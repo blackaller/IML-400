@@ -16,8 +16,6 @@ paragraphs.forEach ( function ( paragraph ){
 		sentences.push(temp);
 	});
 
-//var sentences = text.replace("\n", " ").split(". ");
-
 function replace(string, original, replacement){
 	return string.replace(original, replacement);
 }
@@ -59,106 +57,4 @@ function init() {
 	});
 	document.body.appendChild( content );
 	//console.log( "CHARACTERS:" + content.innerText.length + " — WORDS: " + content.innerText.split(" ").length );
-}
-
-function scramble( text, element) {
-	//case on characters, words, sentences, paragraphs
-	switch ( element ) {
-	    case "characters":
-
-	        break;
-	    case "words":
-	    	var temp = text.split(" ");
-	    	temp.shuffle();
-	    	//console.log(temp);
-	    	text = "";
-	    	temp.forEach ( function ( word ){
-	    		text = text + word + " ";
-	    	});
-	    	return(text);
-	        break;
-	    case "sentences":
-	    	var temp = text.split(". ");
-			temp.shuffle();
-	    	//console.log(temp);
-	    	text = "";
-	    	temp.forEach ( function ( sentence ){
-	    		text = text + sentence + ". ";
-	    	});
-	    	return(text);
-	        break;
-	    case "paragraphs":
-	    	var temp = text.split("\n");
-	    	temp.shuffle();
-	    	//console.log(temp);
-	        break;
-	}
-}
-
-function reverse( text, element) {
-	//case on characters, words, sentences, paragraphs
-	switch ( element ) {
-	    case "characters":
-
-	        break;
-	    case "words":
-	    	var temp = text.split(" ");
-	    	temp.reverse();
-	    	//console.log(temp);
-	    	text = "";
-	    	temp.forEach ( function ( word ){
-	    		text = text + word + " ";
-	    	});
-	    	return(text);
-	        break;
-	    case "sentences":
-	    	var temp = text.split(". ");
-			temp.reverse();
-	    	//console.log(temp);
-	    	text = "";
-	    	temp.forEach ( function ( sentence ){
-	    		text = text + sentence + ". ";
-	    	});
-	    	return(text);
-	        break;
-	    case "paragraphs":
-	    	var temp = text.split("\n");
-	    	temp.reverse();
-	    	//console.log(temp);
-	        break;
-	}
-}
-
-function sort( text, element) {
-	//case on characters, words, sentences, paragraphs
-	switch ( element ) {
-		case "characters":
-
-	        break;
-	    case "words":
-	    	var temp = text.split(" ");
-	    	temp.sort();
-	    	//console.log(temp);
-	    	text = "";
-	    	temp.forEach ( function ( word ){
-	    		text = text + word + " ";
-	    	});
-	    	return(text);
-	        break;
-	    case "sentences":
-	    	var temp = text.split(". ");
-			temp.sort();
-	    	//console.log(temp);
-	    	text = "";
-	    	temp.forEach ( function ( sentence ){
-	    		text = text + sentence + ". ";
-	    	});
-	    	return(text);
-	        break;
-	    case "paragraphs":
-	    	var temp = text.split("\n");
-	    	temp.sort();
-	    	//console.log(temp);
-	        break;
-	}
 }
