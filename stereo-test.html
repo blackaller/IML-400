@@ -2,38 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>IML 400 Current</title>
-    <script>
-        var step = true;
-
-        function animate(whatever) {
-            if ( step ){
-                whatever.style.color="crimson";
-            }
-            else{
-                whatever.style.color="gold";
-            }
-            step = !step;
-            setTimeout(function () {
-                animate(whatever);
-            }, 4000);
-        }
-
-        window.onload = function () {
-            var mydiv = document.getElementById("hello");
-            animate(mydiv);
-        }
-    </script>
-
+    <title>stereovision css 1.0</title>
     <style>
         body{
             margin:0;
-            color: #eee;
-            background: #222;
             width:100%;
             height:auto;
-            /*min-width:1220px;*/
-        }
         }
         a{
             font-weight:bold;
