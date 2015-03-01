@@ -49,7 +49,7 @@
     for (var i=0; i < response.photos.photo.length; i++) {
       photo = response.photos.photo[i];
       t_url = "http://farm" + photo.farm + ".static.flickr.com/" + 
-        photo.server + "/" + photo.id + "_" + photo.secret + "_" + "t.jpg";
+        photo.server + "/" + photo.id + "_" + photo.secret + "_" + "s.jpg";
       p_url = "http://www.flickr.com/photos/" + photo.owner + "/" + photo.id;
       s +=  '<a href="' + p_url + '">' + '<img alt="'+ photo.title + 
         '"src="' + t_url + '"/>' + '</a>';
