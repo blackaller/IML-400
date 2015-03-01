@@ -21,10 +21,14 @@
 </head>
 <body>
 	<script>
+		// these examples are based on https://github.com/blackaller/tiny-three
+		// loads a script at random by default
+		// choose a script like this: IML-400/threejs-examples/?[whatever]=[#]
+
 		function getRandomInt(min, max) {
 			return Math.floor(Math.random() * (max - min)) + min;
 		}
-		var animation = document.createElement( 'script' );
+		
 		var animations = [	"sphere.js",
 							"bubbles.js",
 							"panorama.js",
@@ -32,8 +36,14 @@
 							"orthographic.js",
 							"icosahedron.js",
 							"knot.js"];
-		animation.setAttribute('src', "js/" + animations[ getRandomInt(0, animations.length) ]);
-		//animation.setAttribute('src', "js/" + animations[ 6 ]);
+
+		var myscript = animations[ getRandomInt(0, animations.length) ];
+		var myindex = window.location.search.substring(1).split("=")[1];
+		var inrange = (myindex >= 0) && (myindex < animations.length);
+		if (( window.location.search.substring(1) != "") && inrange ) myscript = animations[ Math.floor(myindex)];
+		
+		var animation = document.createElement( 'script' );
+		animation.setAttribute('src', "js/" + myscript);
 		document.body.appendChild( animation );
 	</script>
 </body>

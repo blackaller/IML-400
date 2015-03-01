@@ -35,12 +35,12 @@ function init() {
 	// cubemap texture by <a href="http://www.zfight.com
 	var materials = [
 
-		loadTexture( 'textures/cube/skybox/px.jpg' ), // right
-		loadTexture( 'textures/cube/skybox/nx.jpg' ), // left
-		loadTexture( 'textures/cube/skybox/py.jpg' ), // top
-		loadTexture( 'textures/cube/skybox/ny.jpg' ), // bottom
-		loadTexture( 'textures/cube/skybox/pz.jpg' ), // back
-		loadTexture( 'textures/cube/skybox/nz.jpg' )  // front
+		loadTexture( 'textures/cube/bridge/px.jpg' ), // right
+		loadTexture( 'textures/cube/bridge/nx.jpg' ), // left
+		loadTexture( 'textures/cube/bridge/py.jpg' ), // top
+		loadTexture( 'textures/cube/bridge/ny.jpg' ), // bottom
+		loadTexture( 'textures/cube/bridge/pz.jpg' ), // back
+		loadTexture( 'textures/cube/bridge/nz.jpg' )  // front
 
 	];
 
