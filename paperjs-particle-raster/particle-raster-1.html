@@ -5,7 +5,7 @@
 	<title>Particle Raster 1</title>
 	<script type="text/javascript" src="js/paper-full.js"></script>
 	<script type="text/paperscript" canvas="canvas">
-		var raster = new Raster('w1'); // loading the image from the DOM
+		var raster = new Raster('my-image'); // loading the image from the DOM
 		var size = new Size(128,128); // particle density
 		var colSize = raster.size / size * 1.5;
 		var fullSize = size * colSize;
@@ -69,7 +69,7 @@
 </head>
 <body>
 	<canvas id="canvas" resize></canvas>
-	<img width="512" height="512" id="w1" style="display: none;" src="img/w3.jpg" />
+	<img width="512" height="512" id="my-image" style="display: none;" src="img/burroughs.jpg" />
 	<svg id="svg" style="position:absolute; background:black;"></svg>
 </body>
 </html>

@@ -1,9 +1,11 @@
 <!doctype html>
 <html>
   <head>
-    <title>Two.js - SVG interpreter</title>
+    <meta name="viewport" content="user-scalable=no">
     <meta charset="utf-8">
     <meta name="viewport" content="user-scalable=no">
+    <link rel="image_src" href="../images/logo.gif" />
+    <link rel="shortcut icon" type="image/gif" href="../images/favicon.gif">
     <script src="js/url.js"></script>
     <script src="js/jquery.js"></script>
     <script src="js/two.js"></script>
@@ -13,6 +15,7 @@
       }
       body {
         background: rgb(0, 0, 75);
+        background: rgb(245, 245, 245);
       }
     </style>
   </head>
@@ -26,7 +29,7 @@
       </svg>
 
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="70px" height="70px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
-      	<path  d="M18.868,0.041c2.876-0.214,5.478,0.416,8.079,2.076c0.344,0.215,1.445,0.959,1.734,1.246
+      	<path fill="crimson" d="M18.868,0.041c2.876-0.214,5.478,0.416,8.079,2.076c0.344,0.215,1.445,0.959,1.734,1.246
   c0.344,0.357,2.739,2.462,3.207,3.149c0.234,0.329,2.519,3.422,2.519,3.422s2.175-2.592,2.56-3.035
   c0.66-0.73,1.28-1.203,1.762-1.604c1.403-1.188,2.835-2.248,4.446-3.278c1.128-0.73,3.068-1.403,4.101-1.56
   c0.289-0.043,1.061-0.157,1.404-0.215c3.923-0.63,9.001,1.145,11.878,3.006c3.179,2.047,5.367,5.067,7.06,8.847
@@ -56,7 +59,7 @@
       </svg>
 
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="70px" height="70px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
-      	<path d="M39.25,0.019c1.312-0.098,2.498,0.189,3.686,0.947c0.156,0.098,0.659,0.437,0.791,0.567
+      	<path fill="crimson" d="M39.25,0.019c1.312-0.098,2.498,0.189,3.686,0.947c0.156,0.098,0.659,0.437,0.791,0.567
   c0.156,0.164,1.248,1.123,1.461,1.436c0.108,0.151,1.15,1.561,1.15,1.561s0.992-1.182,1.167-1.384
   c0.302-0.333,0.584-0.549,0.803-0.731c0.642-0.542,1.293-1.024,2.027-1.495c0.516-0.333,1.399-0.641,1.872-0.712
   c0.13-0.02,0.484-0.071,0.64-0.098c1.788-0.287,4.104,0.522,5.418,1.371c1.447,0.934,2.447,2.311,3.22,4.035
@@ -79,12 +82,7 @@
   H49.276z M49.081,50.63h2.955c2.179,0,2.856-1.794,2.856-2.906c0-1.211-0.678-2.857-2.856-2.857h-2.955V50.63z"/>
 </svg>
 
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="70px" height="70px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
-  <path d="M35.002,0L4.691,13.414L4.69,56.586L34.998,70l30.311-13.412l0.001-43.174L35.002,0z M36.884,32.488l6.616,5.17V23.313
-  l3.585-2.775v23.067L33.443,32.487L36.884,32.488L36.884,32.488z M22.602,49.338l-3.584-2.941V23.294l3.584-2.755V49.338z
-   M22.912,49.305V20.539l3.591,2.763v13.79l-0.006,4.9l5.931-4.939l2.343,2.016L22.912,49.305z M50.979,46.396l-3.624,3.064
-  L32.428,36.607l-5.619,4.641l0.006-3.863l6.214-4.846L47.396,44.33V20.539l3.586,2.763L50.979,46.396z"/>
-</svg>
+
 
 
 
@@ -113,12 +111,12 @@
           $('#assets svg').each(function(i, el) {
 
             var shape = two.interpret(el).center();
-            //shape.fill = 'white';
+            //shape.fill = 'black';
             shape.visible = false;
-            //shape.noStroke();
-            shape.stroke = 'white';
-            shape.linewidth = 0.2;
-            shape.noFill();
+            shape.noStroke();
+            //shape.stroke = 'white';
+            //shape.linewidth = 0.2;
+            //shape.noFill();
             shape.translation.set(two.width / 2, two.height / 2);
             shapes.push(shape);
             _.each(shape.children, function(child) {
@@ -141,8 +139,8 @@
             _.each(shape.children, function(child) {
               _.each(child.vertices, function(v) {
                 if (true){ // for now till i figure out how to ask for specific element ah
-                  var x = v.ox + Math.random()*1;
-                  var y = v.oy + Math.random()*1;
+                  var x = v.ox + Math.random()*0;
+                  var y = v.oy + Math.random()*0;
                 }else{
                   var x = v.ox + Math.random()*5;
                   var y = v.oy + Math.random()*5;

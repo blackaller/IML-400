@@ -6,7 +6,7 @@
 	<link rel="stylesheet" href="../css/style.css">
 	<script type="text/javascript" src="js/paper-full.js"></script>
 	<script type="text/paperscript" canvas="canvas">
-		var raster = new Raster('w1');
+		var raster = new Raster('my-image');
 		var size = new Size(256,256);
 		var colSize = raster.size / size * 1.5;
 		var fullSize = size * colSize;
@@ -36,7 +36,7 @@
 							fillColor:[1,1,1],
 							//fillColor:color,
 							//position:[pos.x+(Math.random()*22), pos.y],
-							size:[20,20]
+							size:[30,30]
 						});
 					}else{
 						path.set({
@@ -68,7 +68,7 @@
 </head>
 <body>
 	<canvas id="canvas" resize></canvas>
-	<img width="512" height="512" id="w1" style="display: none;" src="img/w3.jpg" />
+	<img width="512" height="512" id="my-image" style="display: none;" src="img/bardot.jpg" />
 	<svg id="svg" style="position:absolute;background:black;"></svg>
 </body>
 </html>
