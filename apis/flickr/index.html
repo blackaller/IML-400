@@ -30,8 +30,21 @@
 	// you can input user_id http://storm.usc.edu/~Black/IML-400/apis/flickr/?user_id=75903973@N00
 
 	// Here are some ids
-	var user_ids = ["75903973@N00", "17996229@N03", "33761401@N02", "49488981@N00", "24947909@N06", "40962351@N00", "38546378@N02"]
-	var random_id = user_ids[Math.floor(Math.random()*user_ids.length)];
+	var user_ids = [["blackaller","75903973@N00"],
+					["kylebuza", "17996229@N03"],
+					["frybros", "33761401@N02"],
+					["alombana", "49488981@N00"],
+					["zepolth", "24947909@N06"],
+					["nasacommons", "44494372@N05"],
+					["lomokev", "40962351@N00"],
+					["wiissa", "38546378@N02"],
+					["astilla", "29641417@N04"],
+					["taffeta", "30533017@N00"],
+					["louobedlam", "49229574@N00"],
+					["maeda", "71957046@N00"],
+					["testykitty", "35389340@N08"],
+					["vonmurr", "20193184@N00"]]
+	var random_id = user_ids[Math.floor(Math.random()*user_ids.length)][1];
 	
 	// set up default user id
 	var user_id = random_id;
@@ -50,7 +63,7 @@
 		photo = response.photos.photo[i];
 		t_url = "http://farm" + photo.farm + ".static.flickr.com/" + photo.server + "/" + photo.id + "_" + photo.secret + "_" + "s.jpg";
 		p_url = "http://www.flickr.com/photos/" + photo.owner + "/" + photo.id;
-		s +=  '<a href="' + p_url + '">' + '<img alt="'+ photo.title + '"src="' + t_url + '"/>' + '</a>';
+		s +=  '<a href="' + p_url + '">' + '<img alt="'+ photo.title + '" src="' + t_url + '"/>' + '</a>';
     }
     //document.writeln(s);
     document.body.innerHTML=s;
