@@ -1840,22 +1840,31 @@ var Backbone = Backbone || {};
        * Will try to resolve styles applied via CSS
        */
       applySvgAttributes: function(node, elem) {
-
-        var attributes = {}, styles = {};
+        var attributes = {}, styles = {}, i, key, value, attr;
 
         // Not available in non browser environments
         if (getComputedStyle) {
           // Convert CSSStyleDeclaration to a normal object
           var computedStyles = getComputedStyle(node);
-          _.each(computedStyles, function (item) {
-            styles[item] = computedStyles[item];
-          });
+          i = computedStyles.length;
+
+          while(i--) {
+            key = computedStyles[i];
+            value = computedStyles[key];
+            // Gecko returns undefined for unset properties
+            // Webkit returns the default value
+            if (value !== undefined) {
+              styles[key] = value;
+            }
+          }
         }
 
         // Convert NodeMap to a normal object
-        _.each(node.attributes, function(v, k) {
-          attributes[v.nodeName] = v.nodeValue;
-        });
+        i = node.attributes.length;
+        while(i--) {
+          attr = node.attributes[i];
+          attributes[attr.nodeName] = attr.value;
+        }
 
         // Getting the correct opacity is a bit tricky, since SVG path elements don't
         // support opacity as an attribute, but you can apply it via CSS.
@@ -1869,19 +1878,23 @@ var Backbone = Backbone || {};
         _.extend(styles, attributes);
 
         // Similarly visibility is influenced by the value of both display and visibility.
-        // Calculate a unified value here
-        styles.visible = (styles.display !== 'none') && (styles.visibility === 'visible');
+        // Calculate a unified value here which defaults to `true`.
+        styles.visible = !(_.isUndefined(styles.display) && styles.display === 'none')
+          || (_.isUndefined(styles.visibility) && styles.visibility === 'hidden');
 
         // Now iterate the whole thing
-        _.each(styles, function(value, key) {
+        for (key in styles) {
+          value = styles[key];
 
           switch (key) {
             case 'transform':
-
+              if (value === 'none') break;
               var m = node.getCTM();
-              var matrix = new Two.Matrix(m.a, m.b, m.c, m.d, m.e, m.f);
 
-              // Option 1: edit the underlying matrix and don't force an auto calc.
+              // Might happen when transform string is empty or not valid.
+              if (m === null) break;
+
+              // // Option 1: edit the underlying matrix and don't force an auto calc.
               // var m = node.getCTM();
               // elem._matrix.manual = true;
               // elem._matrix.set(m.a, m.b, m.c, m.d, m.e, m.f);
@@ -1926,19 +1939,16 @@ var Backbone = Backbone || {};
               break;
             case 'fill':
             case 'stroke':
-              elem[key] = (value == 'none') ? 'transparent' : value;
+              elem[key] = (value === 'none') ? 'transparent' : value;
               break;
             case 'id':
               elem.id = value;
               break;
             case 'class':
-              if (!elem.classList) elem.classList = [];
-              value.split(' ').forEach(function (cl) {
-                elem.classList.push(cl);
-              });
+              elem.classList = value.split(' ');
               break;
           }
-        });
+        }
 
         return elem;
 
@@ -1960,8 +1970,8 @@ var Backbone = Backbone || {};
           // Switched up order to inherit more specific styles
           Two.Utils.applySvgAttributes(node, group);
 
-          _.each(node.childNodes, function(n) {
-
+          for (var i = 0, l = node.childNodes.length; i < l; i++) {
+            var n = node.childNodes[i];
             var tag = n.nodeName;
             if (!tag) return;
 
@@ -1971,8 +1981,7 @@ var Backbone = Backbone || {};
               var o = Two.Utils.read[tagName].call(this, n);
               group.add(o);
             }
-
-          }, this);
+          }
 
           return group;
 
@@ -2004,13 +2013,13 @@ var Backbone = Backbone || {};
 
           // Create a Two.Polygon from the paths.
 
-          var coord, control;
-          var coords, relative = false;
-          var closed = false;
+          var coord = new Two.Anchor();
+          var control, coords;
+          var closed = false, relative = false;
           var commands = path.match(/[a-df-z][^a-df-z]*/ig);
           var last = commands.length - 1;
 
-          // Go through commands and look for Inkscape irregularities
+          // Split up polybeziers
 
           _.each(commands.slice(0), function(command, i) {
 
@@ -2024,18 +2033,26 @@ var Backbone = Backbone || {};
             }
 
             switch (lower) {
-              case 'm':
-              case 'l':
               case 'h':
               case 'v':
+                if (items.length > 1) {
+                  bin = 1;
+                }
+                break;
+              case 'm':
+              case 'l':
+              case 't':
                 if (items.length > 2) {
                   bin = 2;
                 }
                 break;
-              case 'c':
               case 's':
-              case 't':
               case 'q':
+                if (items.length > 4) {
+                  bin = 4;
+                }
+                break;
+              case 'c':
                 if (items.length > 6) {
                   bin = 6;
                 }
@@ -2047,9 +2064,24 @@ var Backbone = Backbone || {};
 
             if (bin) {
 
-              for (var j = 0, l = items.length; j < l; j+=bin) {
+              for (var j = 0, l = items.length, times = 0; j < l; j+=bin) {
 
-                result.push([type].concat(items.slice(j, j + bin)).join(' '));
+                var ct = type;
+                if (times > 0) {
+
+                  switch (type) {
+                    case 'm':
+                      ct = 'l';
+                      break;
+                    case 'M':
+                      ct = 'L';
+                      break;
+                  }
+
+                }
+
+                result.push([ct].concat(items.slice(j, j + bin)).join(' '));
+                times++;
 
               }
 
@@ -2152,7 +2184,7 @@ var Backbone = Backbone || {};
                 y1 = coord.y;
 
                 if (!control) {
-                  control = new Two.Vector().copy(coord);
+                  control = new Two.Vector();//.copy(coord);
                 }
 
                 if (lower === 'c') {
@@ -2169,7 +2201,7 @@ var Backbone = Backbone || {};
                   // Calculate reflection control point for proper x2, y2
                   // inclusion.
 
-                  reflection = Two.Utils.getReflection(coord, control, relative);
+                  reflection = getReflection(coord, control, relative);
 
                   x2 = reflection.x;
                   y2 = reflection.y;
@@ -2213,7 +2245,7 @@ var Backbone = Backbone || {};
                 y1 = coord.y;
 
                 if (!control) {
-                  control = new Two.Vector().copy(coord);
+                  control = new Two.Vector();//.copy(coord);
                 }
 
                 if (control.isZero()) {
@@ -2233,7 +2265,7 @@ var Backbone = Backbone || {};
 
                 } else {
 
-                  reflection = Two.Utils.getReflection(coord, control, relative);
+                  reflection = getReflection(coord, control, relative);
 
                   x3 = reflection.x;
                   y3 = reflection.y;
@@ -2572,16 +2604,16 @@ var Backbone = Backbone || {};
       },
 
       /**
-       * Get the reflection of a point "b" about point "a".
+       * Get the reflection of a point "b" about point "a". Where "a" is in
+       * absolute space and "b" is relative to "a".
+       *
+       * http://www.w3.org/TR/SVG11/implnote.html#PathElementImplementationNotes
        */
       getReflection: function(a, b, relative) {
 
-        var d = b.distanceTo(Two.Vector.zero);
-        var theta = angleBetween(Two.Vector.zero, b);
-
         return new Two.Vector(
-          d * cos(theta) + (relative ? 0 : a.x),
-          d * sin(theta) + (relative ? 0 : a.y)
+          2 * a.x - (b.x + a.x) - (relative ? a.x : 0),
+          2 * a.y - (b.y + a.y) - (relative ? a.y : 0)
         );
 
       },
@@ -2621,6 +2653,12 @@ var Backbone = Backbone || {};
 
       },
 
+      // A pretty fast toFixed(3) alternative
+      // See http://jsperf.com/parsefloat-tofixed-vs-math-round/18
+      toFixed: function(v) {
+        return Math.floor(v * 1000) / 1000;
+      },
+
       mod: function(v, l) {
 
         while (v < 0) {
@@ -2640,7 +2678,7 @@ var Backbone = Backbone || {};
 
         Array.call(this);
 
-        if(arguments.length > 1) {
+        if (arguments.length > 1) {
           Array.prototype.push.apply(this, arguments);
         } else if( arguments[0] && Array.isArray(arguments[0]) ) {
           Array.prototype.push.apply(this, arguments[0]);
@@ -2719,7 +2757,8 @@ var Backbone = Backbone || {};
     getBackingStoreRatio = Two.Utils.getBackingStoreRatio,
     getPointOnCubicBezier = Two.Utils.getPointOnCubicBezier,
     getCurveLength = Two.Utils.getCurveLength,
-    integrate = Two.Utils.integrate;
+    integrate = Two.Utils.integrate,
+    getReflection = Two.Utils.getReflection;
 
   _.extend(Two.prototype, Backbone.Events, {
 
@@ -3047,7 +3086,7 @@ var Backbone = Backbone || {};
 
 })();
 
-(function() {
+(function(Two) {
 
   var Vector = Two.Vector = function(x, y) {
 
@@ -3360,9 +3399,9 @@ var Backbone = Backbone || {};
 
   };
 
-})();
+})(Two);
 
-(function() {
+(function(Two) {
 
   // Localized variables
   var commands = Two.Commands;
@@ -3406,15 +3445,10 @@ var Backbone = Backbone || {};
   _.extend(Anchor, {
 
     AppendCurveProperties: function(anchor) {
-
-      var x = anchor._x || anchor.x;
-      var y = anchor._y || anchor.y;
-
       anchor.controls = {
         left: new Two.Vector(0, 0),
         right: new Two.Vector(0, 0)
       };
-
     }
 
   });
@@ -3427,9 +3461,8 @@ var Backbone = Backbone || {};
         Anchor.AppendCurveProperties(this);
       }
 
-      _.each(this.controls, function(v) {
-        v.bind(Two.Events.change, this._broadcast);
-      }, this);
+      this.controls.left.bind(Two.Events.change, this._broadcast);
+      this.controls.right.bind(Two.Events.change, this._broadcast);
 
       return this;
 
@@ -3437,9 +3470,8 @@ var Backbone = Backbone || {};
 
     ignore: function() {
 
-      _.each(this.controls, function(v) {
-        v.unbind(Two.Events.change, this._broadcast);
-      }, this);
+      this.controls.left.unbind(Two.Events.change, this._broadcast);
+      this.controls.right.unbind(Two.Events.change, this._broadcast);
 
       return this;
 
@@ -3531,9 +3563,9 @@ var Backbone = Backbone || {};
     _.extend(this, AnchorProto);
   };
 
-})();
+})(Two);
 
-(function() {
+(function(Two) {
 
   /**
    * Constants
@@ -3634,18 +3666,14 @@ var Backbone = Backbone || {};
      * set and update the current matrix's elements. Only updates
      * specified values.
      */
-    set: function(a, b, c, d, e, f) {
+    set: function(a) {
 
       var elements = a;
       if (!_.isArray(elements)) {
         elements = _.toArray(arguments);
       }
 
-      _.each(elements, function(v, i) {
-        if (_.isNumber(v)) {
-          this.elements[i] = v;
-        }
-      }, this);
+      _.extend(this.elements, elements);
 
       return this.trigger(Two.Events.change);
 
@@ -3911,12 +3939,12 @@ var Backbone = Backbone || {};
 
   });
 
-})();
+})(Two);
 
-(function() {
+(function(Two) {
 
   // Localize variables
-  var mod = Two.Utils.mod;
+  var mod = Two.Utils.mod, toFixed = Two.Utils.toFixed;
 
   var svg = {
 
@@ -3942,27 +3970,23 @@ var Backbone = Backbone || {};
       return elem;
     },
 
-    setAttribute: function(v, k) {
-      this.setAttribute(k, v);
-    },
-
     /**
      * Add attributes from an svg element.
      */
     setAttributes: function(elem, attrs) {
-      _.each(attrs, svg.setAttribute, elem);
+      for (var key in attrs) {
+        elem.setAttribute(key, attrs[key]);
+      }
       return this;
-    },
-
-    removeAttribute: function(v, k) {
-      this.removeAttribute(k);
     },
 
     /**
      * Remove attributes from an svg element.
      */
     removeAttributes: function(elem, attrs) {
-      _.each(attrs, svg.removeAttribute, elem);
+      for (var key in attrs) {
+        elem.removeAttribute(key);
+      }
       return this;
     },
 
@@ -3976,10 +4000,11 @@ var Backbone = Backbone || {};
 
       var l = points.length,
         last = l - 1,
-        d;  // The elusive last Two.Commands.move point
+        d, // The elusive last Two.Commands.move point
+        ret = '';
 
-      return _.map(points, function(b, i) {
-
+      for (var i = 0; i < l; i++) {
+        var b = points[i];
         var command;
         var prev = closed ? mod(i - 1, l) : Math.max(i - 1, 0);
         var next = closed ? mod(i + 1, l) : Math.min(i + 1, last);
@@ -3989,8 +4014,10 @@ var Backbone = Backbone || {};
 
         var vx, vy, ux, uy, ar, bl, br, cl;
 
-        var x = b.x.toFixed(3);
-        var y = b.y.toFixed(3);
+        // Access x and y directly,
+        // bypassing the getter
+        var x = toFixed(b._x);
+        var y = toFixed(b._y);
 
         switch (b._command) {
 
@@ -4004,19 +4031,19 @@ var Backbone = Backbone || {};
             bl = (b.controls && b.controls.left) || b;
 
             if (a._relative) {
-              vx = (ar.x + a.x).toFixed(3);
-              vy = (ar.y + a.y).toFixed(3);
+              vx = toFixed((ar.x + a.x));
+              vy = toFixed((ar.y + a.y));
             } else {
-              vx = ar.x.toFixed(3);
-              vy = ar.y.toFixed(3);
+              vx = toFixed(ar.x);
+              vy = toFixed(ar.y);
             }
 
             if (b._relative) {
-              ux = (bl.x + b.x).toFixed(3);
-              uy = (bl.y + b.y).toFixed(3);
+              ux = toFixed((bl.x + b.x));
+              uy = toFixed((bl.y + b.y));
             } else {
-              ux = bl.x.toFixed(3);
-              uy = bl.y.toFixed(3);
+              ux = toFixed(bl.x);
+              uy = toFixed(bl.y);
             }
 
             command = ((i === 0) ? Two.Commands.move : Two.Commands.curve) +
@@ -4046,23 +4073,23 @@ var Backbone = Backbone || {};
             cl = (c.controls && c.controls.left) || c;
 
             if (b._relative) {
-              vx = (br.x + b.x).toFixed(3);
-              vy = (br.y + b.y).toFixed(3);
+              vx = toFixed((br.x + b.x));
+              vy = toFixed((br.y + b.y));
             } else {
-              vx = br.x.toFixed(3);
-              vy = br.y.toFixed(3);
+              vx = toFixed(br.x);
+              vy = toFixed(br.y);
             }
 
             if (c._relative) {
-              ux = (cl.x + c.x).toFixed(3);
-              uy = (cl.y + c.y).toFixed(3);
+              ux = toFixed((cl.x + c.x));
+              uy = toFixed((cl.y + c.y));
             } else {
-              ux = cl.x.toFixed(3);
-              uy = cl.y.toFixed(3);
+              ux = toFixed(cl.x);
+              uy = toFixed(cl.y);
             }
 
-            x = c.x.toFixed(3);
-            y = c.y.toFixed(3);
+            x = toFixed(c.x);
+            y = toFixed(c.y);
 
             command +=
               ' C ' + vx + ' ' + vy + ' ' + ux + ' ' + uy + ' ' + x + ' ' + y;
@@ -4072,28 +4099,88 @@ var Backbone = Backbone || {};
 
         }
 
-        return command;
+        ret += command + ' ';
 
-      }).join(' ');
+      }
+
+      return ret;
+
+    },
+
+    getClip: function(shape) {
+
+      clip = shape._renderer.clip;
+
+      if (!clip) {
+
+        root = shape;
+
+        while (root.parent) {
+          root = root.parent;
+        }
+
+        clip = shape._renderer.clip = svg.createElement('clipPath');
+        root.defs.appendChild(clip);
+
+      }
+
+      return clip;
 
     },
 
     group: {
 
       // TODO: Can speed up.
+      // TODO: How does this effect a f
       appendChild: function(id) {
+
         var elem = this.domElement.querySelector('#' + id);
-        if (elem) {
-          this.elem.appendChild(elem);
+
+        if (!elem) {
+          return;
         }
+
+        var tag = elem.nodeName;
+
+        if (!tag) {
+          return;
+        }
+
+        var tagName = tag.replace(/svg\:/ig, '').toLowerCase();
+
+        // Defer additions while clipping
+        if (/clippath/.test(tagName)) {
+          return;
+        }
+
+        this.elem.appendChild(elem);
+
       },
 
       // TODO: Can speed up.
       removeChild: function(id) {
-        var elem = this.elem.querySelector('#' + id);
-        if (elem) {
-          this.elem.removeChild(elem);
+
+        var elem = this.domElement.querySelector('#' + id);
+
+        if (!elem) {
+          return;
         }
+
+        var tag = elem.nodeName;
+
+        if (!tag) {
+          return;
+        }
+
+        var tagName = tag.replace(/svg\:/ig, '').toLowerCase();
+
+        // Defer subtractions while clipping
+        if (/clippath/.test(tagName)) {
+          return;
+        }
+
+        this.elem.removeChild(elem);
+
       },
 
       renderChild: function(child) {
@@ -4103,6 +4190,13 @@ var Backbone = Backbone || {};
       render: function(domElement) {
 
         this._update();
+
+        // Shortcut for hidden objects.
+        // Doesn't reset the flags, so changes are stored and
+        // applied once the object is visible again
+        if (this._opacity === 0 && !this._flagOpacity) {
+          return this;
+        }
 
         if (!this._renderer.elem) {
           this._renderer.elem = svg.createElement('g', {
@@ -4123,7 +4217,12 @@ var Backbone = Backbone || {};
         }
 
         for (var id in this.children) {
-          svg.group.renderChild.call(domElement, this.children[id]);
+          var child = this.children[id];
+          svg[child._renderer.type].render.call(child, domElement);
+        }
+
+        if (this._flagOpacity) {
+          this._renderer.elem.setAttribute('opacity', this._opacity);
         }
 
         if (this._flagAdditions) {
@@ -4132,6 +4231,37 @@ var Backbone = Backbone || {};
 
         if (this._flagSubtractions) {
           _.each(this.subtractions, svg.group.removeChild, context);
+        }
+
+        /**
+         * Commented two-way functionality of clips / masks with groups and
+         * polygons. Uncomment when this bug is fixed:
+         * https://code.google.com/p/chromium/issues/detail?id=370951
+         */
+
+        // if (this._flagClip) {
+
+        //   clip = svg.getClip(this);
+        //   elem = this._renderer.elem;
+
+        //   if (this._clip) {
+        //     elem.removeAttribute('id');
+        //     clip.setAttribute('id', this.id);
+        //     clip.appendChild(elem);
+        //   } else {
+        //     clip.removeAttribute('id');
+        //     elem.setAttribute('id', this.id);
+        //     this.parent._renderer.elem.appendChild(elem); // TODO: should be insertBefore
+        //   }
+
+        // }
+
+        if (this._flagMask) {
+          if (this._mask) {
+            this._renderer.elem.setAttribute('clip-path', 'url(#' + this._mask.id + ')');
+          } else {
+            this._renderer.elem.removeAttribute('clip-path');
+          }
         }
 
         return this.flagReset();
@@ -4146,57 +4276,103 @@ var Backbone = Backbone || {};
 
         this._update();
 
-        if (!this._renderer.elem) {
-          this._renderer.elem = svg.createElement('path', {
-            id: this.id
-          });
-          domElement.appendChild(this._renderer.elem);
+        // Shortcut for hidden objects.
+        // Doesn't reset the flags, so changes are stored and
+        // applied once the object is visible again
+        if (this._opacity === 0 && !this._flagOpacity) {
+          return this;
         }
 
-        var elem = this._renderer.elem;
+        // Collect any attribute that needs to be changed here
+        var changed = {};
+
         var flagMatrix = this._matrix.manual || this._flagMatrix;
 
         if (flagMatrix) {
-          elem.setAttribute('transform', 'matrix(' + this._matrix.toString() + ')');
+          changed.transform = 'matrix(' + this._matrix.toString() + ')';
         }
 
         if (this._flagVertices) {
           var vertices = svg.toString(this._vertices, this._closed);
-          elem.setAttribute('d', vertices);
+          changed.d = vertices;
         }
 
         if (this._flagFill) {
-          elem.setAttribute('fill', this._fill);
+          changed.fill = this._fill;
         }
 
         if (this._flagStroke) {
-          elem.setAttribute('stroke', this._stroke);
+          changed.stroke = this._stroke;
         }
 
         if (this._flagLinewidth) {
-          elem.setAttribute('stroke-width', this._linewidth);
+          changed['stroke-width'] = this._linewidth;
         }
 
         if (this._flagOpacity) {
-          elem.setAttribute('stroke-opacity', this._opacity);
-          elem.setAttribute('fill-opacity', this._opacity);
+          changed['stroke-opacity'] = this._opacity;
+          changed['fill-opacity'] = this._opacity;
         }
 
         if (this._flagVisible) {
-          elem.setAttribute('visibility', this._visible ? 'visible' : 'hidden');
+          changed.visibility = this._visible ? 'visible' : 'hidden';
         }
 
         if (this._flagCap) {
-          elem.setAttribute('stroke-linecap', this._cap);
+          changed['stroke-linecap'] = this._cap;
         }
 
         if (this._flagJoin) {
-          elem.setAttribute('stroke-linejoin', this._join);
+          changed['stroke-linejoin'] = this._join;
         }
 
         if (this._flagMiter) {
-          elem.setAttribute('stroke-miterlimit', this.miter);
+          changed['stroke-miterlimit'] = this.miter;
         }
+
+        // If there is no attached DOM element yet,
+        // create it with all necessary attributes.
+        if (!this._renderer.elem) {
+
+          changed.id = this.id;
+          this._renderer.elem = svg.createElement('path', changed);
+          domElement.appendChild(this._renderer.elem);
+
+        // Otherwise apply all pending attributes
+        } else {
+          svg.setAttributes(this._renderer.elem, changed);
+        }
+
+        if (this._flagClip) {
+
+          clip = svg.getClip(this);
+          elem = this._renderer.elem;
+
+          if (this._clip) {
+            elem.removeAttribute('id');
+            clip.setAttribute('id', this.id);
+            clip.appendChild(elem);
+          } else {
+            clip.removeAttribute('id');
+            elem.setAttribute('id', this.id);
+            this.parent._renderer.elem.appendChild(elem); // TODO: should be insertBefore
+          }
+
+        }
+
+        /**
+         * Commented two-way functionality of clips / masks with groups and
+         * polygons. Uncomment when this bug is fixed:
+         * https://code.google.com/p/chromium/issues/detail?id=370951
+         */
+
+        // if (this._flagMask) {
+        //   if (this._mask) {
+        //     elem.setAttribute('clip-path', 'url(#' + this._mask.id + ')');
+        //   } else {
+        //     elem.removeAttribute('clip-path');
+        //   }
+        // }
 
         return this.flagReset();
 
@@ -4214,8 +4390,10 @@ var Backbone = Backbone || {};
     this.domElement = params.domElement || svg.createElement('svg');
 
     this.scene = new Two.Group();
-    this.scene._renderer.elem = this.domElement;
     this.scene.parent = this;
+
+    this.defs = svg.createElement('defs');
+    this.domElement.appendChild(this.defs);
 
   };
 
@@ -4251,14 +4429,14 @@ var Backbone = Backbone || {};
 
   });
 
-})();
+})(Two);
 
-(function() {
+(function(Two) {
 
   /**
    * Constants
    */
-  var mod = Two.Utils.mod;
+  var mod = Two.Utils.mod, toFixed = Two.Utils.toFixed;
   var getRatio = Two.Utils.getRatio;
 
   var canvas = {
@@ -4266,7 +4444,7 @@ var Backbone = Backbone || {};
     group: {
 
       renderChild: function(child) {
-        canvas[child._renderer.type].render.call(child, this);
+        canvas[child._renderer.type].render.call(child, this.ctx, true, this.clip);
       },
 
       render: function(ctx) {
@@ -4275,14 +4453,42 @@ var Backbone = Backbone || {};
         this._update();
 
         var matrix = this._matrix.elements;
+        var parent = this.parent;
+        this._renderer.opacity = this._opacity
+          * (parent && parent._renderer ? parent._renderer.opacity : 1);
+
+        var mask = this._mask;
+        // var clip = this._clip;
+
+        if (!this._renderer.context) {
+          this._renderer.context = {};
+        }
+
+        this._renderer.context.ctx = ctx;
+        // this._renderer.context.clip = clip;
 
         ctx.save();
+
         ctx.transform(
           matrix[0], matrix[3], matrix[1], matrix[4], matrix[2], matrix[5]);
 
-        _.each(this.children, canvas.group.renderChild, ctx);
+        if (mask) {
+          canvas[mask._renderer.type].render.call(mask, ctx, true);
+        }
+
+        _.each(this.children, canvas.group.renderChild, this._renderer.context);
 
         ctx.restore();
+
+       /**
+         * Commented two-way functionality of clips / masks with groups and
+         * polygons. Uncomment when this bug is fixed:
+         * https://code.google.com/p/chromium/issues/detail?id=370951
+         */
+
+        // if (clip) {
+        //   ctx.clip();
+        // }
 
         return this.flagReset();
 
@@ -4292,29 +4498,33 @@ var Backbone = Backbone || {};
 
     polygon: {
 
-      render: function(ctx) {
+      render: function(ctx, forced, parentClipped) {
+
         var matrix, stroke, linewidth, fill, opacity, visible, cap, join, miter,
             closed, commands, length, last, next, prev, a, c, d, ux, uy, vx, vy,
-            ar, bl, br, cl, x, y;
+            ar, bl, br, cl, x, y, mask, clip;
 
         // TODO: Add a check here to only invoke _update if need be.
         this._update();
 
         matrix = this._matrix.elements;
-        stroke = this.stroke;
-        linewidth = this.linewidth;
-        fill = this.fill;
-        opacity = this.opacity;
-        visible = this.visible;
-        cap = this.cap;
-        join = this.join;
-        miter = this.miter;
-        closed = this.closed;
+        stroke = this._stroke;
+        linewidth = this._linewidth;
+        fill = this._fill;
+        opacity = this._opacity * this.parent._renderer.opacity;
+        visible = this._visible;
+        cap = this._cap;
+        join = this._join;
+        miter = this._miter;
+        closed = this._closed;
         commands = this._vertices; // Commands
         length = commands.length;
         last = length - 1;
 
-        if (!visible) {
+        // mask = this._mask;
+        clip = this._clip;
+
+        if (!forced && (!visible || clip)) {
           return this;
         }
 
@@ -4326,6 +4536,16 @@ var Backbone = Backbone || {};
           ctx.transform(
             matrix[0], matrix[3], matrix[1], matrix[4], matrix[2], matrix[5]);
         }
+
+       /**
+         * Commented two-way functionality of clips / masks with groups and
+         * polygons. Uncomment when this bug is fixed:
+         * https://code.google.com/p/chromium/issues/detail?id=370951
+         */
+
+        // if (mask) {
+        //   canvas[mask._renderer.type].render.call(mask, ctx, true);
+        // }
 
         // Styles
 
@@ -4354,8 +4574,8 @@ var Backbone = Backbone || {};
         ctx.beginPath();
         commands.forEach(function(b, i) {
 
-          x = b.x.toFixed(3);
-          y = b.y.toFixed(3);
+          x = toFixed(b.x);
+          y = toFixed(b.y);
 
           switch (b._command) {
 
@@ -4374,19 +4594,19 @@ var Backbone = Backbone || {};
               bl = (b.controls && b.controls.left) || b;
 
               if (a._relative) {
-                vx = (ar.x + a.x).toFixed(3);
-                vy = (ar.y + a.y).toFixed(3);
+                vx = (ar.x + toFixed(a.x));
+                vy = (ar.y + toFixed(a.y));
               } else {
-                vx = ar.x.toFixed(3);
-                vy = ar.y.toFixed(3);
+                vx = toFixed(ar.x);
+                vy = toFixed(ar.y);
               }
 
               if (b._relative) {
-                ux = (bl.x + b.x).toFixed(3);
-                uy = (bl.y + b.y).toFixed(3);
+                ux = (bl.x + toFixed(b.x));
+                uy = (bl.y + toFixed(b.y));
               } else {
-                ux = bl.x.toFixed(3);
-                uy = bl.y.toFixed(3);
+                ux = toFixed(bl.x);
+                uy = toFixed(bl.y);
               }
 
               ctx.bezierCurveTo(vx, vy, ux, uy, x, y);
@@ -4399,23 +4619,23 @@ var Backbone = Backbone || {};
                 cl = (c.controls && c.controls.left) || c;
 
                 if (b._relative) {
-                  vx = (br.x + b.x).toFixed(3);
-                  vy = (br.y + b.y).toFixed(3);
+                  vx = (br.x + toFixed(b.x));
+                  vy = (br.y + toFixed(b.y));
                 } else {
-                  vx = br.x.toFixed(3);
-                  vy = br.y.toFixed(3);
+                  vx = toFixed(br.x);
+                  vy = toFixed(br.y);
                 }
 
                 if (c._relative) {
-                  ux = (cl.x + c.x).toFixed(3);
-                  uy = (cl.y + c.y).toFixed(3);
+                  ux = (cl.x + toFixed(c.x));
+                  uy = (cl.y + toFixed(c.y));
                 } else {
-                  ux = cl.x.toFixed(3);
-                  uy = cl.y.toFixed(3);
+                  ux = toFixed(cl.x);
+                  uy = toFixed(cl.y);
                 }
 
-                x = c.x.toFixed(3);
-                y = c.y.toFixed(3);
+                x = toFixed(c.x);
+                y = toFixed(c.y);
 
                 ctx.bezierCurveTo(vx, vy, ux, uy, x, y);
 
@@ -4442,10 +4662,16 @@ var Backbone = Backbone || {};
           ctx.closePath();
         }
 
-        ctx.fill();
-        ctx.stroke();
+        if (!clip && !parentClipped) {
+          ctx.fill();
+          ctx.stroke();
+        }
 
         ctx.restore();
+
+        if (clip && !parentClipped) {
+          ctx.clip();
+        }
 
         return this.flagReset();
 
@@ -4523,9 +4749,9 @@ var Backbone = Backbone || {};
     ctx.setTransform(1, 0, 0, 1, 0, 0);
   }
 
-})();
+})(Two);
 
-(function() {
+(function(Two) {
 
   /**
    * Constants
@@ -4535,7 +4761,8 @@ var Backbone = Backbone || {};
     mod = Two.Utils.mod,
     identity = [1, 0, 0, 0, 1, 0, 0, 0, 1],
     transformation = new Two.Array(9),
-    getRatio = Two.Utils.getRatio;
+    getRatio = Two.Utils.getRatio,
+    toFixed = Two.Utils.toFixed;
 
   var webgl = {
 
@@ -4582,10 +4809,46 @@ var Backbone = Backbone || {};
 
         }
 
+        if (this._mask) {
+
+          gl.enable(gl.STENCIL_TEST);
+          gl.stencilFunc(gl.ALWAYS, 1, 1);
+
+          gl.colorMask(false, false, false, true);
+          gl.stencilOp(gl.KEEP, gl.KEEP, gl.INCR);
+
+          webgl[this._mask._renderer.type].render.call(this._mask, gl, program, this);
+
+          gl.colorMask(true, true, true, true);
+          gl.stencilFunc(gl.NOTEQUAL, 0, 1);
+          gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
+
+        }
+
+        this._flagOpacity = parent._flagOpacity || this._flagOpacity;
+
+        this._renderer.opacity = this._opacity
+          * (parent && parent._renderer ? parent._renderer.opacity : 1);
+
         _.each(this.children, webgl.group.renderChild, {
           gl: gl,
           program: program
         });
+
+        if (this._mask) {
+
+          gl.colorMask(false, false, false, false);
+          gl.stencilOp(gl.KEEP, gl.KEEP, gl.DECR);
+
+          webgl[this._mask._renderer.type].render.call(this._mask, gl, program, this);
+
+          gl.colorMask(true, true, true, true);
+          gl.stencilFunc(gl.NOTEQUAL, 0, 1);
+          gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
+
+          gl.disable(gl.STENCIL_TEST);
+
+        }
 
         return this.flagReset();
 
@@ -4595,7 +4858,7 @@ var Backbone = Backbone || {};
 
     polygon: {
 
-      render: function(gl, program) {
+      render: function(gl, program, forcedParent) {
 
         if (!this._visible || !this._opacity) {
           return this;
@@ -4608,8 +4871,8 @@ var Backbone = Backbone || {};
         var flagMatrix = this._matrix.manual || this._flagMatrix;
         var flagTexture = this._flagVertices || this._flagFill
           || this._flagStroke || this._flagLinewidth || this._flagOpacity
-          || this._flagVisible || this._flagCap || this._flagJoin
-          || this._flagMiter || this._flagScale;
+          || parent._flagOpacity || this._flagVisible || this._flagCap
+          || this._flagJoin || this._flagMiter || this._flagScale;
 
         this._update();
 
@@ -4638,12 +4901,22 @@ var Backbone = Backbone || {};
             this._renderer.triangles = new Two.Array(12);
           }
 
+          this._renderer.opacity = this._opacity * parent._renderer.opacity;
+
           webgl.getBoundingClientRect(this._vertices, this._linewidth, this._renderer.rect);
           webgl.getTriangles(this._renderer.rect, this._renderer.triangles);
 
           webgl.updateBuffer(gl, this, program);
           webgl.updateTexture(gl, this);
 
+        }
+
+        // if (this._mask) {
+        //   webgl[this._mask._renderer.type].render.call(mask, gl, program, this);
+        // }
+
+        if (this._clip && !forcedParent) {
+          return;
         }
 
         // Draw Texture
@@ -4788,7 +5061,7 @@ var Backbone = Backbone || {};
       var stroke = elem._stroke;
       var linewidth = elem._linewidth * scale;
       var fill = elem._fill;
-      var opacity = elem._opacity;
+      var opacity = elem._renderer.opacity || elem._opacity;
       var cap = elem._cap;
       var join = elem._join;
       var miter = elem._miter;
@@ -4832,8 +5105,8 @@ var Backbone = Backbone || {};
       commands.forEach(function(b, i) {
 
         var next, prev, a, c, ux, uy, vx, vy, ar, bl, br, cl, x, y;
-        x = (b.x * scale + cx).toFixed(3);
-        y = (b.y * scale + cy).toFixed(3);
+        x = toFixed(b.x * scale + cx);
+        y = toFixed(b.y * scale + cy);
 
         switch (b._command) {
 
@@ -4852,48 +5125,48 @@ var Backbone = Backbone || {};
             bl = (b.controls && b.controls.left) || b;
 
             if (a._relative) {
-              vx = ((ar.x + a.x) * scale + cx).toFixed(3);
-              vy = ((ar.y + a.y) * scale + cy).toFixed(3);
+              vx = toFixed((ar.x + a.x) * scale + cx);
+              vy = toFixed((ar.y + a.y) * scale + cy);
             } else {
-              vx = (ar.x * scale + cx).toFixed(3);
-              vy = (ar.y * scale + cy).toFixed(3);
+              vx = toFixed(ar.x * scale + cx);
+              vy = toFixed(ar.y * scale + cy);
             }
 
             if (b._relative) {
-              ux = ((bl.x + b.x) * scale + cx).toFixed(3);
-              uy = ((bl.y + b.y) * scale + cy).toFixed(3);
+              ux = toFixed((bl.x + b.x) * scale + cx);
+              uy = toFixed((bl.y + b.y) * scale + cy);
             } else {
-              ux = (bl.x * scale + cx).toFixed(3);
-              uy = (bl.y * scale + cy).toFixed(3);
+              ux = toFixed(bl.x * scale + cx);
+              uy = toFixed(bl.y * scale + cy);
             }
 
             ctx.bezierCurveTo(vx, vy, ux, uy, x, y);
 
             if (i >= last && closed) {
-              // FIXME: d is undefined here?
+
               c = d;
 
               br = (b.controls && b.controls.right) || b;
               cl = (c.controls && c.controls.left) || c;
 
               if (b._relative) {
-                vx = ((br.x + b.x) * scale + cx).toFixed(3);
-                vy = ((br.y + b.y) * scale + cy).toFixed(3);
+                vx = toFixed((br.x + b.x) * scale + cx);
+                vy = toFixed((br.y + b.y) * scale + cy);
               } else {
-                vx = (br.x * scale + cx).toFixed(3);
-                vy = (br.y * scale + cy).toFixed(3);
+                vx = toFixed(br.x * scale + cx);
+                vy = toFixed(br.y * scale + cy);
               }
 
               if (c._relative) {
-                ux = ((cl.x + c.x) * scale + cx).toFixed(3);
-                uy = ((cl.y + c.y) * scale + cx).toFixed(3);
+                ux = toFixed((cl.x + c.x) * scale + cx);
+                uy = toFixed((cl.y + c.y) * scale + cy);
               } else {
-                ux = (cl.x * scale + cx).toFixed(3);
-                uy = (cl.y * scale + cy).toFixed(3);
+                ux = toFixed(cl.x * scale + cx);
+                uy = toFixed(cl.y * scale + cy);
               }
 
-              x = (c.x * scale + cx).toFixed(3);
-              y = (c.y * scale + cy).toFixed(3);
+              x = toFixed(c.x * scale + cx);
+              y = toFixed(c.y * scale + cy);
 
               ctx.bezierCurveTo(vx, vy, ux, uy, x, y);
 
@@ -5065,6 +5338,7 @@ var Backbone = Backbone || {};
   webgl.ctx = webgl.canvas.getContext('2d');
 
   var Renderer = Two[Two.Types.webgl] = function(options) {
+
     var params, gl, vs, fs;
     this.domElement = options.domElement || document.createElement('canvas');
 
@@ -5074,7 +5348,8 @@ var Backbone = Backbone || {};
 
     this._renderer = {
       matrix: new Two.Array(identity),
-      scale: 1
+      scale: 1,
+      opacity: 1
     };
     this._flagMatrix = true;
 
@@ -5120,8 +5395,10 @@ var Backbone = Backbone || {};
 
     // Setup some initial statements of the gl context
     gl.enable(gl.BLEND);
+
     // https://code.google.com/p/chromium/issues/detail?id=316393
     // gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, gl.TRUE);
+
     gl.blendEquationSeparate(gl.FUNC_ADD, gl.FUNC_ADD);
     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA,
       gl.ONE, gl.ONE_MINUS_SRC_ALPHA );
@@ -5180,9 +5457,9 @@ var Backbone = Backbone || {};
 
   });
 
-})();
+})(Two);
 
-(function() {
+(function(Two) {
 
   var Shape = Two.Shape = function() {
 
@@ -5243,10 +5520,16 @@ var Backbone = Backbone || {};
 
     _flagMatrix: true,
 
+    // _flagMask: false,
+    // _flagClip: false,
+
     // Underlying Properties
 
     _rotation: 0,
     _scale: 1,
+
+    // _mask: null,
+    // _clip: false,
 
     addTo: function(group) {
       group.add(this);
@@ -5298,7 +5581,7 @@ var Backbone = Backbone || {};
      * To be called before render that calculates and collates all information
      * to be as up-to-date as possible for the render. Called once a frame.
      */
-    _update: function() {
+    _update: function(deep) {
 
       if (!this._matrix.manual && this._flagMatrix) {
         this._matrix
@@ -5309,9 +5592,11 @@ var Backbone = Backbone || {};
 
       }
 
-      // Bubble up to parents mainly for `getBoundingClientRect` method.
-      if (this.parent && this.parent._update) {
-        this.parent._update();
+      if (deep) {
+        // Bubble up to parents mainly for `getBoundingClientRect` method.
+        if (this.parent && this.parent._update) {
+          this.parent._update();
+        }
       }
 
       return this;
@@ -5320,8 +5605,7 @@ var Backbone = Backbone || {};
 
     flagReset: function() {
 
-      this._flagMatrix = false;
-      this._flagScale = false;
+      this._flagMatrix = this._flagScale = false;
 
       return this;
 
@@ -5331,9 +5615,9 @@ var Backbone = Backbone || {};
 
   Shape.MakeObservable(Shape.prototype);
 
-})();
+})(Two);
 
-(function() {
+(function(Two) {
 
   /**
    * Constants
@@ -5392,7 +5676,7 @@ var Backbone = Backbone || {};
       'visible',
       'cap',
       'join',
-      'miter',  // Order matters here! See LN:388
+      'miter',
 
       'closed',
       'curved',
@@ -5458,7 +5742,7 @@ var Backbone = Backbone || {};
         }
       });
 
-      Object.defineProperty(Polygon.prototype, 'automatic', {
+      Object.defineProperty(object, 'automatic', {
         get: function() {
           return this._automatic;
         },
@@ -5506,9 +5790,12 @@ var Backbone = Backbone || {};
 
           var bindVerts = _.bind(function(items) {
 
-            _.each(items, function(v) {
-              v.bind(Two.Events.change, updateVertices);
-            }, this);
+            // This function is called a lot
+            // when importing a large SVG
+            var i = items.length;
+            while(i--) {
+              items[i].bind(Two.Events.change, updateVertices);
+            }
 
             updateVertices();
 
@@ -5543,6 +5830,16 @@ var Backbone = Backbone || {};
 
       });
 
+      Object.defineProperty(object, 'clip', {
+        get: function() {
+          return this._clip;
+        },
+        set: function(v) {
+          this._clip = v;
+          this._flagClip = true;
+        }
+      });
+
     }
 
   });
@@ -5565,6 +5862,8 @@ var Backbone = Backbone || {};
     _flagJoin: true,
     _flagMiter: true,
 
+    _flagClip: false,
+
     // Underlying Properties
 
     _length: 0,
@@ -5584,6 +5883,8 @@ var Backbone = Backbone || {};
     _automatic: true,
     _beginning: 0,
     _ending: 1.0,
+
+    _clip: false,
 
     clone: function(parent) {
 
@@ -5705,7 +6006,7 @@ var Backbone = Backbone || {};
     getBoundingClientRect: function(shallow) {
 
       // TODO: Update this to not __always__ update. Just when it needs to.
-      this._update();
+      this._update(true);
 
       var matrix = !!shallow ? this._matrix : getComputedMatrix(this);
 
@@ -5812,9 +6113,9 @@ var Backbone = Backbone || {};
         return this;
       }
 
-      _.each(this._vertices, function(p, i) {
-        p._command = i === 0 ? Two.Commands.move : Two.Commands.line;
-      }, this);
+      for (var i = 0; i < this._vertices.length; i++) {
+        this._vertices[i]._command = i === 0 ? Two.Commands.move : Two.Commands.line;
+      }
 
       return this;
 
@@ -5971,7 +6272,8 @@ var Backbone = Backbone || {};
 
       this._flagVertices =  this._flagFill =  this._flagStroke =
          this._flagLinewidth = this._flagOpacity = this._flagVisible =
-         this._flagCap = this._flagJoin = this._flagMiter = false;
+         this._flagCap = this._flagJoin = this._flagMiter = 
+         this._flagClip = false;
 
       Two.Shape.prototype.flagReset.call(this);
 
@@ -5982,6 +6284,10 @@ var Backbone = Backbone || {};
   });
 
   Polygon.MakeObservable(Polygon.prototype);
+
+  /**
+   * Utility functions
+   */
 
   function getCurveLength(a, b, limit) {
     // TODO: DRYness
@@ -6043,9 +6349,9 @@ var Backbone = Backbone || {};
 
   }
 
-})();
+})(Two);
 
-(function() {
+(function(Two) {
 
   /**
    * Constants
@@ -6069,8 +6375,43 @@ var Backbone = Backbone || {};
 
     MakeObservable: function(object) {
 
+      var properties = Two.Polygon.Properties.slice(0);
+      var oi = _.indexOf(properties, 'opacity');
+
+      if (oi >= 0) {
+
+        properties.splice(oi, 1);
+
+        Object.defineProperty(object, 'opacity', {
+
+          get: function() {
+            return this._opacity;
+          },
+
+          set: function(v) {
+            this._opacity = v;
+            this._flagOpacity = true;
+          }
+
+        });
+
+      }
+
       Two.Shape.MakeObservable(object);
-      Group.MakeGetterSetters(object, Two.Polygon.Properties);
+      Group.MakeGetterSetters(object, properties);
+
+      Object.defineProperty(object, 'mask', {
+        get: function() {
+          return this._mask;
+        },
+        set: function(v) {
+          this._mask = v;
+          this._flagMask = true;
+          if (!v.clip) {
+            v.clip = true;
+          }
+        }
+      });
 
     },
 
@@ -6113,6 +6454,9 @@ var Backbone = Backbone || {};
 
     _flagAdditions: false,
     _flagSubtractions: false,
+    _flagOpacity: true,
+
+    _flagMask: false,
 
     // Underlying Properties
 
@@ -6132,8 +6476,10 @@ var Backbone = Backbone || {};
     _beginning: 0,
     _ending: 1.0,
 
+    _mask: null,
+
     /**
-     * Group has a gotcha in that it's at the moment required to be bound to
+     * TODO: Group has a gotcha in that it's at the moment required to be bound to
      * an instance of two in order to add elements correctly. This needs to
      * be rethought and fixed.
      */
@@ -6371,7 +6717,7 @@ var Backbone = Backbone || {};
       var rect;
 
       // TODO: Update this to not __always__ update. Just when it needs to.
-      this._update();
+      this._update(true);
 
       // Variables need to be defined here, because of nested nature of groups.
       var left = Infinity, right = -Infinity,
@@ -6447,6 +6793,8 @@ var Backbone = Backbone || {};
         this._flagSubtractions = false;
       }
 
+      this._flagMask = this._flagOpacity = false;
+
       Two.Shape.prototype.flagReset.call(this);
 
       return this;
@@ -6457,4 +6805,4 @@ var Backbone = Backbone || {};
 
   Group.MakeObservable(Group.prototype);
 
-})();
+})(Two);
