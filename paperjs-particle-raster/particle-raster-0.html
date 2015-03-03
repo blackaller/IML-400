@@ -7,7 +7,7 @@
 	<script type="text/javascript" src="js/paper-full.js"></script>
 	<script type="text/paperscript" canvas="canvas">
 		var raster = new Raster('my-image');
-		var size = new Size(256,256);
+		var size = new Size(256,256); // i like 256
 		var colSize = raster.size / size * 1.5;
 		var fullSize = size * colSize;
 
@@ -68,7 +68,8 @@
 </head>
 <body>
 	<canvas id="canvas" resize></canvas>
-	<img width="512" height="512" id="my-image" style="display: none;" src="img/bardot.jpg" />
+	<!--img size originally 512-->s
+	<img width="256" height="256" id="my-image" style="display: none;" src="img/bardot.jpg" />
 	<svg id="svg" style="position:absolute;background:black;"></svg>
 </body>
 </html>
