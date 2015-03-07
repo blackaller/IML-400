@@ -48,7 +48,7 @@
 
       scene = new THREE.Scene();
 
-      camera = new THREE.PerspectiveCamera(90, 1, 0.001, 700);
+      camera = new THREE.PerspectiveCamera(150, 1, 0.001, 700);
       camera.position.set(0, 10, 0);
       scene.add(camera);
 
@@ -127,7 +127,7 @@
         alphaMap: texture
       });
 
-      var skybox = new THREE.Mesh( new THREE.BoxGeometry( 700, 700, 700 ), skyMaterial );
+      var skybox = new THREE.Mesh( new THREE.BoxGeometry( 900, 900, 900 ), skyMaterial );
 
       var ambient = new THREE.AmbientLight( 0xffffff );
       scene.add(ambient);
@@ -140,7 +140,7 @@
         envMap: cubemap
       });
 
-      var geometry = new THREE.PlaneGeometry(1000, 1000);
+      var geometry = new THREE.PlaneGeometry(2000, 2000);
 
       var mesh = new THREE.Mesh(geometry, material);
       mesh.rotation.x = -Math.PI / 2;
