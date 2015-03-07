@@ -144,28 +144,29 @@
 
       var mesh = new THREE.Mesh(geometry, material);
       mesh.rotation.x = -Math.PI / 2;
+      mesh.position.y = -20;
       scene.add(mesh);
 
-      torus1 = new THREE.Mesh(new THREE.TorusGeometry(3,0.5,50,50), material);
+      torus1 = new THREE.Mesh(new THREE.TorusGeometry(5,1,50,50), material);
       torus1.rotation.y = 90;
-      torus1.position.x = 15;
+      torus1.position.x = 30;
       torus1.position.y = 10;
       scene.add(torus1);
 
-      torus2 = new THREE.Mesh(new THREE.TorusGeometry(4.5,0.5,50,50), material);
+      torus2 = new THREE.Mesh(new THREE.TorusGeometry(8,1,50,50), material);
       torus2.rotation.y = 90;
-      torus2.position.x = 15;
+      torus2.position.x = 30;
       torus2.position.y = 10;
       scene.add(torus2);
 
-      torus3 = new THREE.Mesh(new THREE.TorusGeometry(6,0.5,50,50), material);
+      torus3 = new THREE.Mesh(new THREE.TorusGeometry(11,1,50,50), material);
       torus3.rotation.y = 90;
-      torus3.position.x = 15;
+      torus3.position.x = 30;
       torus3.position.y = 10;
       scene.add(torus3);
 
-      ico = new THREE.Mesh(new THREE.IcosahedronGeometry(1.2,2), material);
-      ico.position.x = 15;
+      ico = new THREE.Mesh(new THREE.IcosahedronGeometry(2,2), material);
+      ico.position.x = 30;
       ico.position.y = 10;
       scene.add(ico);
 
