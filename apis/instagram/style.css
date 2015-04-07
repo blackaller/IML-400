@@ -1,13 +1,24 @@
 body {
   background: #222222;
+  color:deeppink;
+  font-family: 'Courier';
 }
-.hashtag li {
-  display: inline-block;
-  line-height:0;
-  margin: 10px 10px;
+
+#container{
+  margin:0;
+  padding:0;
 }
-.hashtag {
-  margin: auto;
+#container li {
+  float:left;
+  list-style: none;
+  margin:10px;
+
+}
+.user {
+  position:absolute;
+  margin:12px;
+  border-radius:50%;
+  width:80px;
 }
 a {
   color:dodgerblue;
@@ -17,8 +28,9 @@ a:hover {
   color:#eeeeee;
 }
 
-h1 {
 
+h1 {
+  //text-align:center;
   font-family: 'Courier';
   font-size: 24px;
   margin:30px 0 10px 10px;
