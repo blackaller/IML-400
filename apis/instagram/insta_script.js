@@ -11,7 +11,7 @@ $.ajax({
             //$("#container").append( data.data[i].filter);
             $("#container").append("<li><img src='" + data.data[i].user.profile_picture + "' class='user' />"
                                     + "<a target='_blank' href='" + data.data[i].link
-                                    + " class='picture''><img src='" + data.data[i].images.low_resolution.url + "' /></a></li>"); 
+                                    + "' class='picture''><img src='" + data.data[i].images.low_resolution.url + "' /></a></li>"); 
         }
     }
 });
